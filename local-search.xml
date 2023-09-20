@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Keyword in C——restrict</title>
+    <link href="/2023/09/20/keyword-restrict/"/>
+    <url>/2023/09/20/keyword-restrict/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C语言关键字——restrict"><a href="#C语言关键字——restrict" class="headerlink" title="C语言关键字——restrict"></a>C语言关键字——<code>restrict</code></h1><h2 id="1-编译标准"><a href="#1-编译标准" class="headerlink" title="1. 编译标准"></a>1. 编译标准</h2><p><code>restrict</code>关键字<strong>自C99引入</strong>，编译时可能需要加上编译标准参数</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc -std=c99 ...<br></code></pre></td></tr></table></figure><h2 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h2><p><code>restrict</code>广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化</p><h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 1.c</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">foo</span><span class="hljs-params">(<span class="hljs-type">int</span> *a, <span class="hljs-type">int</span> *b)</span><br>&#123;<br>    *a = <span class="hljs-number">5</span>;<br>    *b = <span class="hljs-number">6</span>;<br>    <span class="hljs-keyword">return</span> *a + *b;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 2.c</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">rfoo</span><span class="hljs-params">(<span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> a, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> b)</span><br>&#123;<br>    *a = <span class="hljs-number">5</span>;<br>    *b = <span class="hljs-number">6</span>;<br>    <span class="hljs-keyword">return</span> *a + *b;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ gcc -std=c99 -O3 -c 1.c 2.c<br>$ objdump -S 1.o 2.o<br><br>1.o:     file format elf64-x86-64<br><br><br>Disassembly of section .text:<br><br>0000000000000000 &lt;foo&gt;:<br>   0:   c7 07 05 00 00 00       movl   <span class="hljs-variable">$0x5</span>,(%rdi)<br>   6:   c7 06 06 00 00 00       movl   <span class="hljs-variable">$0x6</span>,(%rsi)<br>   c:   8b 07                   mov    (%rdi),%eax<br>   e:   83 c0 06                add    <span class="hljs-variable">$0x6</span>,%eax<br>  11:   c3                      retq<br><br>2.o:     file format elf64-x86-64<br><br><br>Disassembly of section .text:<br><br>0000000000000000 &lt;rfoo&gt;:<br>   0:   c7 07 05 00 00 00       movl   <span class="hljs-variable">$0x5</span>,(%rdi)<br>   6:   c7 06 06 00 00 00       movl   <span class="hljs-variable">$0x6</span>,(%rsi)<br>   c:   b8 0b 00 00 00          mov    <span class="hljs-variable">$0xb</span>,%eax<br>  11:   c3                      retq<br></code></pre></td></tr></table></figure><h2 id="4-注意"><a href="#4-注意" class="headerlink" title="4. 注意"></a>4. 注意</h2><p>虽然<strong>C++标准中没有<code>restrict</code>关键字</strong>，但是许多C++编译器支持类似的功能。例如，GCC和Clang支持<code>__restrict__</code>关键字，而Microsoft的Visual C++编译器支持<code>__restrict</code>关键字，这些关键字的语义与C语言中的<code>restrict</code>相似</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Language</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>c</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Basic Linux Commands</title>
     <link href="/2023/09/03/basic-linux-commands/"/>
     <url>/2023/09/03/basic-linux-commands/</url>
