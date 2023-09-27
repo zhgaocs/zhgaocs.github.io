@@ -16,24 +16,24 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C语言关键字——restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
+    <meta name="description" content="C++ 单例模式1. 概念单例模式确保一个类只有一个实例，并提供一个全局访问点 2. 实现12345678910&#x2F;&#x2F; 加入锁，确保线程安全class Mutex&amp;#123;public:    Mutex();    ~Mutex();    void request();    void release();    ...&amp;#125;;  1234567891011121314151617181">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Keyword in C - restrict">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/09/20/keyword-restrict/index.html">
+<meta property="og:title" content="Singleton Pattern">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/09/27/singleton-pattern/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="C语言关键字——restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
+<meta property="og:description" content="C++ 单例模式1. 概念单例模式确保一个类只有一个实例，并提供一个全局访问点 2. 实现12345678910&#x2F;&#x2F; 加入锁，确保线程安全class Mutex&amp;#123;public:    Mutex();    ~Mutex();    void request();    void release();    ...&amp;#125;;  1234567891011121314151617181">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-20T03:59:21.000Z">
-<meta property="article:modified_time" content="2023-09-20T04:35:36.083Z">
+<meta property="article:published_time" content="2023-09-27T11:54:24.000Z">
+<meta property="article:modified_time" content="2023-09-27T11:59:29.540Z">
 <meta property="article:author" content="zhgaocs">
-<meta property="article:tag" content="c">
+<meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Keyword in C - restrict - zhgaocs</title>
+  <title>Singleton Pattern - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Keyword in C - restrict"></span>
+            <span id="subtitle" data-typed-text="Singleton Pattern"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-09-20 11:59" pubdate>
-          September 20, 2023 am
+        <time datetime="2023-09-27 19:54" pubdate>
+          September 27, 2023 pm
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          850 words
+          1.5k words
         
       </span>
     
@@ -282,12 +282,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Keyword in C - restrict</h1>
+            <h1 id="seo-header">Singleton Pattern</h1>
             
               <p class="note note-info">
                 
                   
-                    Last updated on 7 days ago
+                    Last updated on 14 minutes ago
                   
                 
               </p>
@@ -295,16 +295,17 @@
             
               <div class="markdown-body">
                 
-                <h1 id="C语言关键字——restrict"><a href="#C语言关键字——restrict" class="headerlink" title="C语言关键字——restrict"></a>C语言关键字——<code>restrict</code></h1><h2 id="1-编译标准"><a href="#1-编译标准" class="headerlink" title="1. 编译标准"></a>1. 编译标准</h2><p><code>restrict</code>关键字<strong>自C99引入</strong>，编译时可能需要加上编译标准参数</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc -std=c99 ...<br></code></pre></td></tr></table></figure>
+                <h1 id="C-单例模式"><a href="#C-单例模式" class="headerlink" title="C++ 单例模式"></a>C++ 单例模式</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h2><p>单例模式确保一个类只有一个实例，并提供一个全局访问点</p>
+<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// 加入锁，确保线程安全</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Mutex</span>();<br>    ~<span class="hljs-built_in">Mutex</span>();<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">request</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">release</span><span class="hljs-params">()</span></span>;<br>    ...<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<h2 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h2><p><code>restrict</code>广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化</p>
-<h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 1.c</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">foo</span><span class="hljs-params">(<span class="hljs-type">int</span> *a, <span class="hljs-type">int</span> *b)</span><br>&#123;<br>    *a = <span class="hljs-number">5</span>;<br>    *b = <span class="hljs-number">6</span>;<br>    <span class="hljs-keyword">return</span> *a + *b;<br>&#125;<br></code></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 2.c</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">rfoo</span><span class="hljs-params">(<span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> a, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> b)</span><br>&#123;<br>    *a = <span class="hljs-number">5</span>;<br>    *b = <span class="hljs-number">6</span>;<br>    <span class="hljs-keyword">return</span> *a + *b;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// singleton.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton *<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroyInstance</span><span class="hljs-params">()</span></span>;<br>	...<br>    <br><span class="hljs-meta">#<span class="hljs-keyword">if</span> __cplusplus &gt;= 201103L <span class="hljs-comment">// C++11及以后</span></span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    <span class="hljs-built_in">Singleton</span>(Singleton &amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(Singleton &amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// 拷贝构造函数和拷贝赋值运算符声明在private段，不可定义</span><br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;);<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 构造函数和析构函数必须声明在private段，且必须在源文件中实现</span><br><span class="hljs-comment">     * 构造函数和析构函数不能被定义为删除的函数，因为需要在类其他函数中new和delete指向本类对象的指针</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-built_in">Singleton</span>();<br>    ~<span class="hljs-built_in">Singleton</span>();<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton *instance_ptr;<br>    <span class="hljs-type">static</span> Mutex mutex;<br>&#125;;<br><br><span class="hljs-comment">// 静态非常量成员必须类外初始化</span><br>Singleton *Singleton::instance_ptr = <span class="hljs-literal">nullptr</span>;<br>Mutex Singleton::mutex;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ gcc -std=c99 -O3 -c 1.c 2.c<br>$ objdump -S 1.o 2.o<br><br>1.o:     file format elf64-x86-64<br><br><br>Disassembly of section .text:<br><br>0000000000000000 &lt;foo&gt;:<br>   0:   c7 07 05 00 00 00       movl   <span class="hljs-variable">$0x5</span>,(%rdi)<br>   6:   c7 06 06 00 00 00       movl   <span class="hljs-variable">$0x6</span>,(%rsi)<br>   c:   8b 07                   mov    (%rdi),%eax<br>   e:   83 c0 06                add    <span class="hljs-variable">$0x6</span>,%eax<br>  11:   c3                      retq<br><br>2.o:     file format elf64-x86-64<br><br><br>Disassembly of section .text:<br><br>0000000000000000 &lt;rfoo&gt;:<br>   0:   c7 07 05 00 00 00       movl   <span class="hljs-variable">$0x5</span>,(%rdi)<br>   6:   c7 06 06 00 00 00       movl   <span class="hljs-variable">$0x6</span>,(%rsi)<br>   c:   b8 0b 00 00 00          mov    <span class="hljs-variable">$0xb</span>,%eax<br>  11:   c3                      retq<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// singleton.cpp</span><br><span class="hljs-function">Singleton *<span class="hljs-title">Singleton::getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> == instance_ptr)<br>    &#123;<br>        mutex.<span class="hljs-built_in">request</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> == instance_ptr) <span class="hljs-comment">// 两个if语句实现双重检查锁定模式</span><br>            instance_ptr = <span class="hljs-keyword">new</span> Singleton;<br>        mutex.<span class="hljs-built_in">release</span>();<br>    &#125;<br>    <span class="hljs-keyword">return</span> instance_ptr;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Singleton::destroyInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> != instance_ptr)<br>    &#123;<br>        mutex.<span class="hljs-built_in">request</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> != instance_ptr)<br>        &#123;<br>            <span class="hljs-keyword">delete</span> instance_ptr;<br>            instance_ptr = <span class="hljs-literal">nullptr</span>;<br>        &#125;<br>        mutex.<span class="hljs-built_in">release</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="4-注意"><a href="#4-注意" class="headerlink" title="4. 注意"></a>4. 注意</h2><p>虽然<strong>C++标准中没有<code>restrict</code>关键字</strong>，但是许多C++编译器支持类似的功能。例如，GCC和Clang支持<code>__restrict__</code>关键字，而Microsoft的Visual C++编译器支持<code>__restrict</code>关键字，这些关键字的语义与C语言中的<code>restrict</code>相似</p>
+<h2 id="3-使用"><a href="#3-使用" class="headerlink" title="3. 使用"></a>3. 使用</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;singleton.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Singleton *si_ptr = Singleton::<span class="hljs-built_in">getInstance</span>();<br>    ...<br>    si_ptr-&gt;<span class="hljs-built_in">destroyInstance</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
 
                 
               </div>
@@ -338,7 +339,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/c/" class="print-no-link">#c</a>
+        <a href="/tags/cpp/" class="print-no-link">#cpp</a>
       
     </div>
   
