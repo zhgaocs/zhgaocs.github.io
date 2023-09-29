@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/environ.png">
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/memory_arrangement.png">
 <meta property="article:published_time" content="2023-09-29T10:08:01.000Z">
-<meta property="article:modified_time" content="2023-09-29T10:17:01.199Z">
+<meta property="article:modified_time" content="2023-09-29T14:45:56.782Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -214,7 +214,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k words
+          3.1k words
         
       </span>
     
@@ -369,11 +369,17 @@
 <h3 id="6-4-unsetenv函数"><a href="#6-4-unsetenv函数" class="headerlink" title="6.4 unsetenv函数"></a>6.4 <code>unsetenv</code>函数</h3><h4 id="6-4-1-函数原型"><a href="#6-4-1-函数原型" class="headerlink" title="6.4.1 函数原型"></a>6.4.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">unsetenv</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br></code></pre></td></tr></table></figure>
 
 <h4 id="6-4-2-功能"><a href="#6-4-2-功能" class="headerlink" title="6.4.2 功能"></a>6.4.2 功能</h4><p>删除<code>name</code>的定义，即使<code>name</code>不存在也不算出错</p>
-<h2 id="7-setjmp宏和longjmp函数"><a href="#7-setjmp宏和longjmp函数" class="headerlink" title="7. setjmp宏和longjmp函数"></a>7. <code>setjmp</code>宏和<code>longjmp</code>函数</h2><h3 id="7-1-功能"><a href="#7-1-功能" class="headerlink" title="7.1 功能"></a>7.1 功能</h3><p><code>setjmp</code>：保存上下文</p>
-<p><code>longjmp</code>：实现跳转（可跨越函数，<code>goto</code>只能函数内跳转）</p>
-<h3 id="7-2-原型"><a href="#7-2-原型" class="headerlink" title="7.2 原型"></a>7.2 原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;setjmp.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">setjmp</span><span class="hljs-params">(jmp_buf env)</span>; <span class="hljs-comment">// 直接调用返回0，从longjmp调用返回则返回非0值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">longjmp</span><span class="hljs-params">(jmp_buf env, <span class="hljs-type">int</span> val)</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="7-setjmp和longjmp函数"><a href="#7-setjmp和longjmp函数" class="headerlink" title="7. setjmp和longjmp函数"></a>7. <code>setjmp</code>和<code>longjmp</code>函数</h2><h3 id="7-1-setjmp"><a href="#7-1-setjmp" class="headerlink" title="7.1 setjmp"></a>7.1 <code>setjmp</code></h3><h4 id="7-1-1-原型"><a href="#7-1-1-原型" class="headerlink" title="7.1.1 原型"></a>7.1.1 原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;setjmp.h&gt;</span></span><br><br><span class="hljs-comment">// 直接调用返回0</span><br><span class="hljs-comment">// 从longjmp调用返回则返回非0值</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setjmp</span><span class="hljs-params">(jmp_buf buf)</span>;<br></code></pre></td></tr></table></figure>
 
-<h2 id="8-getrlimit和setrlimit函数"><a href="#8-getrlimit和setrlimit函数" class="headerlink" title="8. getrlimit和setrlimit函数"></a>8. <code>getrlimit</code>和<code>setrlimit</code>函数</h2><h3 id="8-1-功能"><a href="#8-1-功能" class="headerlink" title="8.1 功能"></a>8.1 功能</h3><p>获取进程资源限制</p>
+<h4 id="7-1-2-功能"><a href="#7-1-2-功能" class="headerlink" title="7.1.2 功能"></a>7.1.2 功能</h4><p>保存当前程序状态（堆栈、寄存器等信息）到<code>buf</code>中</p>
+<h3 id="7-2-longjmp"><a href="#7-2-longjmp" class="headerlink" title="7.2 longjmp"></a>7.2 <code>longjmp</code></h3><h4 id="7-2-1-函数原型"><a href="#7-2-1-函数原型" class="headerlink" title="7.2.1 函数原型"></a>7.2.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;setjmp.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">longjmp</span><span class="hljs-params">(jmp_buf buf, <span class="hljs-type">int</span> val)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-2-2-功能"><a href="#7-2-2-功能" class="headerlink" title="7.2.2 功能"></a>7.2.2 功能</h4><p>恢复最近一次调用<code>setjmp</code>时保存的程序状态，并使得<code>setjmp</code>返回<code>val</code></p>
+<h3 id="7-3-使用场景"><a href="#7-3-使用场景" class="headerlink" title="7.3 使用场景"></a>7.3 使用场景</h3><ul>
+<li>错误处理：深层嵌套中发生了错误</li>
+<li>协程</li>
+</ul>
+<h2 id="8-getrlimit和setrlimit函数"><a href="#8-getrlimit和setrlimit函数" class="headerlink" title="8. getrlimit和setrlimit函数"></a>8. <code>getrlimit</code>和<code>setrlimit</code>函数</h2><h3 id="8-1-功能"><a href="#8-1-功能" class="headerlink" title="8.1 功能"></a>8.1 功能</h3><p>获取和更改进程资源限制</p>
 <h3 id="8-2-函数原型"><a href="#8-2-函数原型" class="headerlink" title="8.2 函数原型"></a>8.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/resource.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">rlimit</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">rlim_t</span> rlim_cur; <span class="hljs-comment">/* soft limit: current limit */</span><br>    <span class="hljs-type">rlim_t</span> rlim_max; <span class="hljs-comment">/* hard limit: maximum value for rlim_cur */</span><br>&#125;;<br><br><span class="hljs-comment">// 成功返回0，出错返回非0值</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">getrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource, <span class="hljs-keyword">struct</span> rlimit *rlptr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">setrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> rlimit *rlptr)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="8-3-更改资源限制的规则"><a href="#8-3-更改资源限制的规则" class="headerlink" title="8.3 更改资源限制的规则"></a>8.3 更改资源限制的规则</h3><ul>
