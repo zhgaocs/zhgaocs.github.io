@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/github.png">
+  <link rel="icon" href="/img/github.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhgaocs">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 7  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APUE Chapter 7 - Process Environment">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/index.html">
+<meta property="og:site_name" content="zhgaocs">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 7  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/c_startup_termination.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/environ.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/memory_arrangement.png">
+<meta property="article:published_time" content="2023-09-29T10:08:01.000Z">
+<meta property="article:modified_time" content="2023-09-29T10:17:01.199Z">
+<meta property="article:author" content="zhgaocs">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/c_startup_termination.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>APUE Chapter 7 - Process Environment - zhgaocs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhgaocs.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>zhgaocs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="APUE Chapter 7 - Process Environment"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-29 18:08" pubdate>
+          September 29, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k words
+        
+      </span>
+    
+
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">APUE Chapter 7 - Process Environment</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-7-进程环境"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-7-进程环境" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 7  进程环境"></a>Advanced Programming in the UNIX Environment—Chapter 7  进程环境</h1><h2 id="1-进程终止"><a href="#1-进程终止" class="headerlink" title="1. 进程终止"></a>1. 进程终止</h2><h3 id="1-1-进程终止方式"><a href="#1-1-进程终止方式" class="headerlink" title="1.1 进程终止方式"></a>1.1 进程终止方式</h3><h4 id="1-1-1-正常终止"><a href="#1-1-1-正常终止" class="headerlink" title="1.1.1 正常终止"></a>1.1.1 正常终止</h4><ul>
+<li><code>main</code>返回</li>
+<li>调用<code>exit</code></li>
+<li>调用<code>_exit</code>或<code>_Exit</code></li>
+<li>最后一个线程从启动例程返回</li>
+<li>最后一个线程调用<code>pthread_exit</code></li>
+</ul>
+<h4 id="1-1-2-异常终止"><a href="#1-1-2-异常终止" class="headerlink" title="1.1.2 异常终止"></a>1.1.2 异常终止</h4><ul>
+<li>调用<code>abort</code></li>
+<li>接到一个信号并终止</li>
+<li>最后一个线程对取消请求做出响应</li>
+</ul>
+<h3 id="1-2-exit、-exit和-Exit函数"><a href="#1-2-exit、-exit和-Exit函数" class="headerlink" title="1.2 exit、_exit和_Exit函数"></a>1.2 <code>exit</code>、<code>_exit</code>和<code>_Exit</code>函数</h3><h4 id="1-2-1-函数原型"><a href="#1-2-1-函数原型" class="headerlink" title="1.2.1 函数原型"></a>1.2.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">exit</span><span class="hljs-params">(<span class="hljs-type">int</span> status)</span>;<br><span class="hljs-type">void</span> _Exit(<span class="hljs-type">int</span> status);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">void</span> _exit(<span class="hljs-type">int</span> status);<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-2-2-区别"><a href="#1-2-2-区别" class="headerlink" title="1.2.2 区别"></a>1.2.2 区别</h4><ul>
+<li><code>exit</code><ul>
+<li>ISO C</li>
+<li>终止程序前<strong>执行清理</strong>任务，关闭I&#x2F;O，刷新流，调用<code>atexit</code>中注册的函数</li>
+</ul>
+</li>
+<li><code>_exit</code><ul>
+<li>POSIX</li>
+<li>直接进入内核，关闭打开的文件描述符，不刷新流，不调用<code>atexit</code>中注册的函数</li>
+</ul>
+</li>
+<li><code>_Exit</code><ul>
+<li>ISO C</li>
+<li>等价于<code>_exit</code>（Linux下）</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-atexit函数"><a href="#1-3-atexit函数" class="headerlink" title="1.3 atexit函数"></a>1.3 <code>atexit</code>函数</h3><h4 id="1-3-1-功能"><a href="#1-3-1-功能" class="headerlink" title="1.3.1 功能"></a>1.3.1 功能</h4><p>注册程序<strong>正常终止</strong>时执行的函数。<code>atexit</code> 函数可以多次调用，以注册多个退出处理函数，这些函数将按照注册的顺序逆序执行</p>
+<h4 id="1-3-2-函数原型"><a href="#1-3-2-函数原型" class="headerlink" title="1.3.2 函数原型"></a>1.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">atexit</span><span class="hljs-params">(<span class="hljs-type">void</span> (*func)())</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-3-3-C程序启动和终止"><a href="#1-3-3-C程序启动和终止" class="headerlink" title="1.3.3 C程序启动和终止"></a>1.3.3 C程序启动和终止</h4><p><img src="/2023/09/29/apue-ch7/c_startup_termination.png" srcset="/img/loading.gif" lazyload alt="C程序的启动和终止"></p>
+<h2 id="2-环境表"><a href="#2-环境表" class="headerlink" title="2. 环境表"></a>2. 环境表</h2><h3 id="2-1-声明"><a href="#2-1-声明" class="headerlink" title="2.1 声明"></a>2.1 声明</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">extern</span> <span class="hljs-type">char</span> **environ;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-类型"><a href="#2-2-类型" class="headerlink" title="2.2 类型"></a>2.2 类型</h3><ul>
+<li><strong>全局变量</strong></li>
+<li>字符指针数组（每个字符指针指向以null字符结尾的字符串，字符串格式：<em>name&#x3D;value</em>）</li>
+</ul>
+<p><img src="/2023/09/29/apue-ch7/environ.png" srcset="/img/loading.gif" lazyload alt="5个C字符串组成的环境表"></p>
+<h3 id="2-3-注意"><a href="#2-3-注意" class="headerlink" title="2.3 注意"></a>2.3 注意</h3><ul>
+<li>每个程序都会接收到一张环境表</li>
+<li>查看整个环境，使用<code>environ</code>指针；用<code>getenv</code>和<code>putenv</code>函数访问和修改特定环境变量</li>
+</ul>
+<h2 id="3-C程序的存储空间布局"><a href="#3-C程序的存储空间布局" class="headerlink" title="3. C程序的存储空间布局"></a>3. C程序的存储空间布局</h2><p><img src="/2023/09/29/apue-ch7/memory_arrangement.png" srcset="/img/loading.gif" lazyload alt="典型的存储器安排"></p>
+<h2 id="4-共享库"><a href="#4-共享库" class="headerlink" title="4. 共享库"></a>4. 共享库</h2><h3 id="4-1-优缺点"><a href="#4-1-优缺点" class="headerlink" title="4.1 优缺点"></a>4.1 优缺点</h3><ul>
+<li>优点<ul>
+<li>可执行文件体积较小</li>
+<li>易于维护</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>运行效率低</li>
+<li>依赖于库</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-存储器分配"><a href="#5-存储器分配" class="headerlink" title="5. 存储器分配"></a>5. 存储器分配</h2><h3 id="5-1-功能"><a href="#5-1-功能" class="headerlink" title="5.1 功能"></a>5.1 功能</h3><ul>
+<li><code>malloc</code>：分配指定字节数的存储区，初始值不确定</li>
+<li><code>calloc</code>：为<strong>指定数量</strong>具有<strong>指定长度</strong>的对象分配存储空间，该空间<strong>每一位初始化为0</strong></li>
+<li><code>realloc</code>：更改分配区长度。当增加分配区长度时，可能将先前分配的内容移动到另一个足够大的区域，以便在尾端提供增加的存储区，新增区域初始值不确定</li>
+<li><code>free</code>：释放<code>malloc</code>、<code>calloc</code>和<code>realloc</code>分配的内存块</li>
+</ul>
+<h3 id="5-2-函数原型"><a href="#5-2-函数原型" class="headerlink" title="5.2 函数原型"></a>5.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回非空指针，出错返回NULL</span><br><span class="hljs-type">void</span> *<span class="hljs-title function_">malloc</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span>;<br><span class="hljs-type">void</span> *<span class="hljs-title function_">calloc</span><span class="hljs-params">(<span class="hljs-type">size_t</span> nobj, <span class="hljs-type">size_t</span> size)</span>;<br><span class="hljs-type">void</span> *<span class="hljs-title function_">realloc</span><span class="hljs-params">(<span class="hljs-type">void</span> *ptr, <span class="hljs-type">size_t</span> newsize)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">free</span><span class="hljs-params">(<span class="hljs-type">void</span> *ptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-注意"><a href="#5-3-注意" class="headerlink" title="5.3 注意"></a>5.3 注意</h3><ul>
+<li><strong><code>malloc</code>、<code>calloc</code>和<code>realloc</code>返回的指针一定是对齐的</strong></li>
+<li>大多数实现中，实际分配的存储空间比请求的空间稍大，额外的空间用来记录管理信息——分配块的长度、指向下一个分配块的指针</li>
+</ul>
+<h2 id="6-环境变量"><a href="#6-环境变量" class="headerlink" title="6. 环境变量"></a>6. 环境变量</h2><h3 id="6-1-getenv函数"><a href="#6-1-getenv函数" class="headerlink" title="6.1 getenv函数"></a>6.1 <code>getenv</code>函数</h3><h4 id="6-1-1-函数原型"><a href="#6-1-1-函数原型" class="headerlink" title="6.1.1 函数原型"></a>6.1.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">char</span> *<span class="hljs-title function_">getenv</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="6-1-2-返回值"><a href="#6-1-2-返回值" class="headerlink" title="6.1.2 返回值"></a>6.1.2 返回值</h4><p>返回一个指针，指向<em>name&#x3D;value</em>字符串中的<em>value</em></p>
+<h4 id="6-1-3-示例"><a href="#6-1-3-示例" class="headerlink" title="6.1.3 示例"></a>6.1.3 示例</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">char</span> *pHome = getenv(<span class="hljs-string">&quot;HOME&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;HOME=%s\n&quot;</span>, pHome);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">// HOME=/root</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-putenv函数"><a href="#6-2-putenv函数" class="headerlink" title="6.2 putenv函数"></a>6.2 <code>putenv</code>函数</h3><h4 id="6-2-1-函数原型"><a href="#6-2-1-函数原型" class="headerlink" title="6.2.1 函数原型"></a>6.2.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回非0值</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">putenv</span><span class="hljs-params">(<span class="hljs-type">char</span> *str)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-2-2-功能"><a href="#6-2-2-功能" class="headerlink" title="6.2.2 功能"></a>6.2.2 功能</h4><p>取形式为<em>name&#x3D;env</em>的字符串，将其放到环境表中。如果<em>name</em>已经存在，则先删除原定义</p>
+<h3 id="6-3-setenv函数"><a href="#6-3-setenv函数" class="headerlink" title="6.3 setenv函数"></a>6.3 <code>setenv</code>函数</h3><h4 id="6-3-1-函数原型"><a href="#6-3-1-函数原型" class="headerlink" title="6.3.1 函数原型"></a>6.3.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setenv</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *value, <span class="hljs-type">int</span> rewrite)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-3-2-功能"><a href="#6-3-2-功能" class="headerlink" title="6.3.2 功能"></a>6.3.2 功能</h4><p>将<code>name</code>设置为<code>value</code>，若<code>name</code>已存在，那么</p>
+<ul>
+<li><code>rewrite</code>非0：删除现有定义（<code>name</code>设置为<code>value</code>）</li>
+<li><code>rewrite</code>为0：不删除现有定义（<code>name</code>不设置为<code>value</code>，而且也不算出错）</li>
+</ul>
+<h3 id="6-4-unsetenv函数"><a href="#6-4-unsetenv函数" class="headerlink" title="6.4 unsetenv函数"></a>6.4 <code>unsetenv</code>函数</h3><h4 id="6-4-1-函数原型"><a href="#6-4-1-函数原型" class="headerlink" title="6.4.1 函数原型"></a>6.4.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">unsetenv</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-4-2-功能"><a href="#6-4-2-功能" class="headerlink" title="6.4.2 功能"></a>6.4.2 功能</h4><p>删除<code>name</code>的定义，即使<code>name</code>不存在也不算出错</p>
+<h2 id="7-setjmp宏和longjmp函数"><a href="#7-setjmp宏和longjmp函数" class="headerlink" title="7. setjmp宏和longjmp函数"></a>7. <code>setjmp</code>宏和<code>longjmp</code>函数</h2><h3 id="7-1-功能"><a href="#7-1-功能" class="headerlink" title="7.1 功能"></a>7.1 功能</h3><p><code>setjmp</code>：保存上下文</p>
+<p><code>longjmp</code>：实现跳转（可跨越函数，<code>goto</code>只能函数内跳转）</p>
+<h3 id="7-2-原型"><a href="#7-2-原型" class="headerlink" title="7.2 原型"></a>7.2 原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;setjmp.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">setjmp</span><span class="hljs-params">(jmp_buf env)</span>; <span class="hljs-comment">// 直接调用返回0，从longjmp调用返回则返回非0值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">longjmp</span><span class="hljs-params">(jmp_buf env, <span class="hljs-type">int</span> val)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="8-getrlimit和setrlimit函数"><a href="#8-getrlimit和setrlimit函数" class="headerlink" title="8. getrlimit和setrlimit函数"></a>8. <code>getrlimit</code>和<code>setrlimit</code>函数</h2><h3 id="8-1-功能"><a href="#8-1-功能" class="headerlink" title="8.1 功能"></a>8.1 功能</h3><p>获取进程资源限制</p>
+<h3 id="8-2-函数原型"><a href="#8-2-函数原型" class="headerlink" title="8.2 函数原型"></a>8.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/resource.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">rlimit</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">rlim_t</span> rlim_cur; <span class="hljs-comment">/* soft limit: current limit */</span><br>    <span class="hljs-type">rlim_t</span> rlim_max; <span class="hljs-comment">/* hard limit: maximum value for rlim_cur */</span><br>&#125;;<br><br><span class="hljs-comment">// 成功返回0，出错返回非0值</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">getrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource, <span class="hljs-keyword">struct</span> rlimit *rlptr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">setrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> rlimit *rlptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-3-更改资源限制的规则"><a href="#8-3-更改资源限制的规则" class="headerlink" title="8.3 更改资源限制的规则"></a>8.3 更改资源限制的规则</h3><ul>
+<li>软限制值小于等于硬限制值</li>
+<li>可降低硬限制值，但硬限制值必须大于等于软限制值</li>
+<li>只有超级用户可以提高硬限制值</li>
+</ul>
+<h3 id="8-4-参数resource"><a href="#8-4-参数resource" class="headerlink" title="8.4 参数resource"></a>8.4 参数<code>resource</code></h3><table>
+<thead>
+<tr>
+<th align="center">值</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>RLIMIT_AS</code></td>
+<td align="center">进程可用存储区的最大总长度（字节）</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_CORE</code></td>
+<td align="center">core文件的最大字节数，为0时阻止创建core文件</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_CPU</code></td>
+<td align="center">CPU时间最大量值（秒），超过此软限制时，向该进程发送<code>SIGXCPU</code>信号</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_DATA</code></td>
+<td align="center">数据段最大字节长度</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_FSIZE</code></td>
+<td align="center">可以创建的文件的最大字节长度，超过此软限制时，向该进程发送<code>SIGXFSZ</code>信号</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_LOCKS</code></td>
+<td align="center">一个进程可以持有的文件锁的最大数</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_MEMLOCK</code></td>
+<td align="center">一个进程使用<code>mlock</code>能够锁定在存储器中的最大字节长度</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_NOFILE</code></td>
+<td align="center">一个进程可以打开的最大文件数</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_NPROC</code></td>
+<td align="center">每个实际用户ID可拥有的最大子进程数</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_RSS</code></td>
+<td align="center">最大驻内存集的字节长度</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_SBSIZE</code></td>
+<td align="center">用户在任一给定时刻可以占用的套接字缓冲区的最大长度</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_STACK</code></td>
+<td align="center">栈的最大字节长度</td>
+</tr>
+<tr>
+<td align="center"><code>RLIMIT_VMEM</code></td>
+<td align="center">等价于<code>RLIMIT_AS</code></td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/" class="print-no-link">#linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"zhgaocs/zhgaocs.github.io","repo-id":"R_kgDOKEb5DA","category":"Announcements","category-id":"DIC_kwDOKEb5DM4CZqPN","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+        <span>Powered by</span> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <span>&</span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

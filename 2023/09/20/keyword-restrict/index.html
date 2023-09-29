@@ -16,15 +16,15 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C语言关键字——restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
+    <meta name="description" content="C语言关键字—restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Keyword in C - restrict">
 <meta property="og:url" content="https://zhgaocs.github.io/2023/09/20/keyword-restrict/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="C语言关键字——restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
+<meta property="og:description" content="C语言关键字—restrict1. 编译标准restrict关键字自C99引入，编译时可能需要加上编译标准参数 1gcc -std&#x3D;c99 ...  2. 作用restrict广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化 3. 示例1234567&#x2F;&#x2F; 1.cint foo(int *a, int *b)&amp;#123;    *a &#x3D; 5;    *b &#x3D; 6;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-09-20T03:59:21.000Z">
-<meta property="article:modified_time" content="2023-09-20T04:35:36.083Z">
+<meta property="article:modified_time" content="2023-09-28T05:51:54.199Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="c">
 <meta name="twitter:card" content="summary_large_image">
@@ -210,7 +210,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          850 words
+          849 words
         
       </span>
     
@@ -272,18 +272,10 @@
           <article class="post-content mx-auto">
             <h1 id="seo-header">Keyword in C - restrict</h1>
             
-              <p class="note note-info">
-                
-                  
-                    Last updated on 7 days ago
-                  
-                
-              </p>
-            
             
               <div class="markdown-body">
                 
-                <h1 id="C语言关键字——restrict"><a href="#C语言关键字——restrict" class="headerlink" title="C语言关键字——restrict"></a>C语言关键字——<code>restrict</code></h1><h2 id="1-编译标准"><a href="#1-编译标准" class="headerlink" title="1. 编译标准"></a>1. 编译标准</h2><p><code>restrict</code>关键字<strong>自C99引入</strong>，编译时可能需要加上编译标准参数</p>
+                <h1 id="C语言关键字—restrict"><a href="#C语言关键字—restrict" class="headerlink" title="C语言关键字—restrict"></a>C语言关键字—<code>restrict</code></h1><h2 id="1-编译标准"><a href="#1-编译标准" class="headerlink" title="1. 编译标准"></a>1. 编译标准</h2><p><code>restrict</code>关键字<strong>自C99引入</strong>，编译时可能需要加上编译标准参数</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc -std=c99 ...<br></code></pre></td></tr></table></figure>
 
 <h2 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h2><p><code>restrict</code>广泛用于函数参数上，用于告知编译器该指针是唯一引用某内存的方式，以进行更有效的优化</p>
