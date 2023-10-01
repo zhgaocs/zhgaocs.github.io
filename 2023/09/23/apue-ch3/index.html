@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/file_share.png">
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/open_same_file.png">
 <meta property="article:published_time" content="2023-09-23T08:41:03.000Z">
-<meta property="article:modified_time" content="2023-09-23T09:15:28.198Z">
+<meta property="article:modified_time" content="2023-10-01T11:00:05.942Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -213,7 +213,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k words
+          4.3k words
         
       </span>
     
@@ -322,16 +322,18 @@
 <li><code>O_NONBLOCK</code>：非阻塞</li>
 </ul>
 <h4 id="2-3-3-其他"><a href="#2-3-3-其他" class="headerlink" title="2.3.3 其他"></a>2.3.3 其他</h4><ul>
-<li><p><code>O_SYNC</code>：等待写完成（数据和属性）</p>
-</li>
-<li><p><code>O_DSYNC</code>：等待写完成（仅数据）</p>
-</li>
-<li><p><code>O_RSYNC</code>：同步读写</p>
-</li>
-<li><p>……</p>
-</li>
+<li><code>O_SYNC</code>：等待写完成（数据和属性）</li>
+<li><code>O_DSYNC</code>：等待写完成（仅数据）</li>
+<li><code>O_RSYNC</code>：同步读写</li>
+<li>……</li>
 </ul>
-<h3 id="2-4-文件名和路径名截断"><a href="#2-4-文件名和路径名截断" class="headerlink" title="2.4 文件名和路径名截断"></a>2.4 文件名和路径名截断</h3><h2 id="3-creat函数"><a href="#3-creat函数" class="headerlink" title="3. creat函数"></a>3. <code>creat</code>函数</h2><h3 id="3-1-功能"><a href="#3-1-功能" class="headerlink" title="3.1 功能"></a>3.1 功能</h3><p>创建文件</p>
+<h3 id="2-4-参数mode"><a href="#2-4-参数mode" class="headerlink" title="2.4 参数mode"></a>2.4 参数<code>mode</code></h3><p>只有参数<code>oflag</code>为<code>O_CREAT</code>时才可设置此参数</p>
+<h4 id="2-4-1-作用"><a href="#2-4-1-作用" class="headerlink" title="2.4.1 作用"></a>2.4.1 作用</h4><p>该参数用于设置文件访问权限的初始值，和用户掩码<code>umask</code>有关</p>
+<h4 id="2-4-2-参数形式"><a href="#2-4-2-参数形式" class="headerlink" title="2.4.2 参数形式"></a>2.4.2 参数形式</h4><ul>
+<li>八进制数：如0777（rwxrwxrwx）</li>
+<li>预定义宏的位操作：如<code>S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH</code>（rw-rw-r–）</li>
+</ul>
+<h3 id="2-5-文件名和路径名截断"><a href="#2-5-文件名和路径名截断" class="headerlink" title="2.5 文件名和路径名截断"></a>2.5 文件名和路径名截断</h3><h2 id="3-creat函数"><a href="#3-creat函数" class="headerlink" title="3. creat函数"></a>3. <code>creat</code>函数</h2><h3 id="3-1-功能"><a href="#3-1-功能" class="headerlink" title="3.1 功能"></a>3.1 功能</h3><p>创建文件</p>
 <h3 id="3-2-函数原型"><a href="#3-2-函数原型" class="headerlink" title="3.2 函数原型"></a>3.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回为只写打开的文件描述符，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">creat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="3-3-等价形式"><a href="#3-3-等价形式" class="headerlink" title="3.3 等价形式"></a>3.3 等价形式</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">open(pathname, O_WRONLY | O_CREAT | O_TRUNC, mode);<br></code></pre></td></tr></table></figure>
