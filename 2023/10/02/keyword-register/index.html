@@ -16,22 +16,23 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C++ 单例模式1. 概念单例模式确保一个类只有一个实例，并提供一个全局访问点 2. 实现12345678910&#x2F;&#x2F; 加入锁，确保线程安全class Mutex&amp;#123;public:    Mutex();    ~Mutex();    void request();    void release();    ...&amp;#125;;  1234567891011121314151617181">
+    <meta name="description" content="关键字—register1. C语言存储期和链接1.1 存储期即生存期，有四种：  自动存储期：当一个对象在其所在的块中被声明时，会为其分配存储空间；而退出该块时，会释放其存储空间 静态存储期：对象的存储期贯穿整个程序的执行过程 线程存储期：对象的存储期贯穿整个线程的执行过程（C11起） 分配存储期：使用动态内存分配函数来分配和释放存储空间  1.2 链接即可见性，有三种：  无链接：标识符只能在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Singleton Pattern">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/09/27/singleton-pattern/index.html">
+<meta property="og:title" content="Keyword-register">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/10/02/keyword-register/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="C++ 单例模式1. 概念单例模式确保一个类只有一个实例，并提供一个全局访问点 2. 实现12345678910&#x2F;&#x2F; 加入锁，确保线程安全class Mutex&amp;#123;public:    Mutex();    ~Mutex();    void request();    void release();    ...&amp;#125;;  1234567891011121314151617181">
+<meta property="og:description" content="关键字—register1. C语言存储期和链接1.1 存储期即生存期，有四种：  自动存储期：当一个对象在其所在的块中被声明时，会为其分配存储空间；而退出该块时，会释放其存储空间 静态存储期：对象的存储期贯穿整个程序的执行过程 线程存储期：对象的存储期贯穿整个线程的执行过程（C11起） 分配存储期：使用动态内存分配函数来分配和释放存储空间  1.2 链接即可见性，有三种：  无链接：标识符只能在">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-27T11:54:24.000Z">
-<meta property="article:modified_time" content="2023-09-27T11:59:29.540Z">
+<meta property="article:published_time" content="2023-10-02T14:23:54.000Z">
+<meta property="article:modified_time" content="2023-10-02T14:25:21.601Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="cpp">
+<meta property="article:tag" content="c">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Singleton Pattern - zhgaocs</title>
+  <title>Keyword-register - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -185,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Singleton Pattern"></span>
+            <span id="subtitle" data-typed-text="Keyword-register"></span>
           
         </div>
 
@@ -196,8 +197,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-09-27 19:54" pubdate>
-          September 27, 2023 pm
+        <time datetime="2023-10-02 22:23" pubdate>
+          October 2, 2023 pm
         </time>
       </span>
     
@@ -208,7 +209,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k words
+          1.1k words
         
       </span>
     
@@ -260,22 +261,86 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Singleton Pattern</h1>
+            <h1 id="seo-header">Keyword-register</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="C-单例模式"><a href="#C-单例模式" class="headerlink" title="C++ 单例模式"></a>C++ 单例模式</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h2><p>单例模式确保一个类只有一个实例，并提供一个全局访问点</p>
-<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// 加入锁，确保线程安全</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Mutex</span>();<br>    ~<span class="hljs-built_in">Mutex</span>();<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">request</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">release</span><span class="hljs-params">()</span></span>;<br>    ...<br>&#125;;<br></code></pre></td></tr></table></figure>
+                <h1 id="关键字—register"><a href="#关键字—register" class="headerlink" title="关键字—register"></a>关键字—<code>register</code></h1><h2 id="1-C语言存储期和链接"><a href="#1-C语言存储期和链接" class="headerlink" title="1. C语言存储期和链接"></a>1. C语言存储期和链接</h2><h3 id="1-1-存储期"><a href="#1-1-存储期" class="headerlink" title="1.1 存储期"></a>1.1 存储期</h3><p>即生存期，有四种：</p>
+<ul>
+<li>自动存储期：当一个对象在其所在的块中被声明时，会为其分配存储空间；而退出该块时，会释放其存储空间</li>
+<li>静态存储期：对象的存储期贯穿整个程序的执行过程</li>
+<li>线程存储期：对象的存储期贯穿整个线程的执行过程<em>（C11起）</em></li>
+<li>分配存储期：使用动态内存分配函数来分配和释放存储空间</li>
+</ul>
+<h3 id="1-2-链接"><a href="#1-2-链接" class="headerlink" title="1.2 链接"></a>1.2 链接</h3><p>即可见性，有三种：</p>
+<ul>
+<li>无链接：标识符只能在其所在的作用域中被引用</li>
+<li>内部链接：标识符可以在当前的翻译单元的所有作用域中被引用</li>
+<li>外部链接：标识符可以在任何其他翻译单元的所有作用域中被引用</li>
+</ul>
+<h2 id="2-C语言存储类型说明符"><a href="#2-C语言存储类型说明符" class="headerlink" title="2. C语言存储类型说明符"></a>2. C语言存储类型说明符</h2><table>
+<thead>
+<tr>
+<th align="center">关键字</th>
+<th align="center">存储期</th>
+<th align="center">链接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>auto</code></td>
+<td align="center">自动</td>
+<td align="center">无链接</td>
+</tr>
+<tr>
+<td align="center"><code>extern</code></td>
+<td align="center">静态</td>
+<td align="center">外部链接（除非声明带内部链接）</td>
+</tr>
+<tr>
+<td align="center"><code>register</code></td>
+<td align="center">自动</td>
+<td align="center">无链接</td>
+</tr>
+<tr>
+<td align="center"><code>static</code></td>
+<td align="center">静态</td>
+<td align="center">内部链接（除非在块作用域）</td>
+</tr>
+</tbody></table>
+<h2 id="3-register的作用"><a href="#3-register的作用" class="headerlink" title="3. register的作用"></a>3. <code>register</code>的作用</h2><p><code>register</code>关键字建议编译器将变量存储在CPU寄存器以提高效率，但实际是否采纳这一建议由编译器自行决定</p>
+<h2 id="4-C语言使用register注意事项"><a href="#4-C语言使用register注意事项" class="headerlink" title="4. C语言使用register注意事项"></a>4. C语言使用<code>register</code>注意事项</h2><ul>
+<li>不能对寄存器变量进行取地址运算</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> *p = &amp;i; <span class="hljs-comment">// error</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// singleton.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton *<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">destroyInstance</span><span class="hljs-params">()</span></span>;<br>	...<br>    <br><span class="hljs-meta">#<span class="hljs-keyword">if</span> __cplusplus &gt;= 201103L <span class="hljs-comment">// C++11及以后</span></span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    <span class="hljs-built_in">Singleton</span>(Singleton &amp;&amp;) = <span class="hljs-keyword">delete</span>;<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(Singleton &amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><span class="hljs-meta">#<span class="hljs-keyword">else</span></span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// 拷贝构造函数和拷贝赋值运算符声明在private段，不可定义</span><br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;);<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;);<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 构造函数和析构函数必须声明在private段，且必须在源文件中实现</span><br><span class="hljs-comment">     * 构造函数和析构函数不能被定义为删除的函数，因为需要在类其他函数中new和delete指向本类对象的指针</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-built_in">Singleton</span>();<br>    ~<span class="hljs-built_in">Singleton</span>();<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton *instance_ptr;<br>    <span class="hljs-type">static</span> Mutex mutex;<br>&#125;;<br><br><span class="hljs-comment">// 静态非常量成员必须类外初始化</span><br>Singleton *Singleton::instance_ptr = <span class="hljs-literal">nullptr</span>;<br>Mutex Singleton::mutex;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>register</code>关键字可以修饰指针变量</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> *p = &amp;i; <span class="hljs-comment">// OK</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// singleton.cpp</span><br><span class="hljs-function">Singleton *<span class="hljs-title">Singleton::getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> == instance_ptr)<br>    &#123;<br>        mutex.<span class="hljs-built_in">request</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> == instance_ptr) <span class="hljs-comment">// 两个if语句实现双重检查锁定模式</span><br>            instance_ptr = <span class="hljs-keyword">new</span> Singleton;<br>        mutex.<span class="hljs-built_in">release</span>();<br>    &#125;<br>    <span class="hljs-keyword">return</span> instance_ptr;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Singleton::destroyInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> != instance_ptr)<br>    &#123;<br>        mutex.<span class="hljs-built_in">request</span>();<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> != instance_ptr)<br>        &#123;<br>            <span class="hljs-keyword">delete</span> instance_ptr;<br>            instance_ptr = <span class="hljs-literal">nullptr</span>;<br>        &#125;<br>        mutex.<span class="hljs-built_in">release</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>关键字 <code>register</code> 只能在局部作用域内和函数参数列表中使用，不能在全局作用域中使用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; <span class="hljs-comment">//error</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="3-使用"><a href="#3-使用" class="headerlink" title="3. 使用"></a>3. 使用</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;singleton.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Singleton *si_ptr = Singleton::<span class="hljs-built_in">getInstance</span>();<br>    ...<br>    si_ptr-&gt;<span class="hljs-built_in">destroyInstance</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">func</span><span class="hljs-params">(<span class="hljs-keyword">register</span> <span class="hljs-type">int</span> number)</span> <span class="hljs-comment">// OK</span><br>&#123;<br>    <span class="hljs-keyword">return</span> number;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<ul>
+<li><code>register</code>是一个存储类别说明符，每个变量只能拥有一个存储类别说明符。因此，<code>register</code>关键字不能与<code>static</code>一同使用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">register</span> <span class="hljs-type">static</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; <span class="hljs-comment">// error</span><br></code></pre></td></tr></table></figure>
 
-
+<ul>
+<li>C程序虽然可以声明不限数量的寄存器变量，但编译器可能并不会把所有这些变量都存入寄存器中</li>
+</ul>
+<h2 id="5-C-register"><a href="#5-C-register" class="headerlink" title="5. C++register"></a>5. C++<code>register</code></h2><ul>
+<li><p><strong>从C++17开始，虽然<code>register</code>关键词被保留，但在C++中不再使用</strong></p>
+</li>
+<li><p>在C++17之前，使用<code>register</code>关键字声明的对象与未带任何存储类说明符的变量在语义上没有区别（相当于C中的<code>auto</code>），并且可以用来提示优化器将该变量的值存储到CPU寄存器中</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// test.cpp</span><br><br><span class="hljs-keyword">register</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; <span class="hljs-comment">// error</span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">register</span> <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> *p = &amp;j; <span class="hljs-comment">// OK</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -310,6 +375,8 @@
       <i class="iconfont icon-tags"></i>
       
         <a href="/tags/cpp/" class="print-no-link">#cpp</a>
+      
+        <a href="/tags/c/" class="print-no-link">#c</a>
       
     </div>
   
