@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/file_share.png">
 <meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/open_same_file.png">
 <meta property="article:published_time" content="2023-09-23T08:41:03.000Z">
-<meta property="article:modified_time" content="2023-10-01T11:00:05.942Z">
+<meta property="article:modified_time" content="2023-10-02T15:41:37.390Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -401,7 +401,7 @@
 
 <p>但<code>dup2</code>是原子操作，不会被中断</p>
 <h2 id="11-sync-fsync和fdatasync函数"><a href="#11-sync-fsync和fdatasync函数" class="headerlink" title="11. sync fsync和fdatasync函数"></a>11. <code>sync</code> <code>fsync</code>和<code>fdatasync</code>函数</h2><h3 id="11-1-背景"><a href="#11-1-背景" class="headerlink" title="11.1 背景"></a>11.1 背景</h3><p>延迟写策略<em>（减少磁盘读写次数，降低了文件内容的更新速度）</em></p>
-<h3 id="11-2-函数原型"><a href="#11-2-函数原型" class="headerlink" title="11.2 函数原型"></a>11.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fsync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">fdatasync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">sync</span><span class="hljs-params">()</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="11-2-函数原型"><a href="#11-2-函数原型" class="headerlink" title="11.2 函数原型"></a>11.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fsync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">fdatasync</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">sync</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="11-3-效果"><a href="#11-3-效果" class="headerlink" title="11.3 效果"></a>11.3 效果</h3><ul>
 <li><code>sync</code>函数将修改过的缓冲区排入写队列，然后返回，并不等待实际写操作结束。<em>守护进程<code>update</code>和命令<code>sync</code>也调用<code>sync</code>函数</em></li>
