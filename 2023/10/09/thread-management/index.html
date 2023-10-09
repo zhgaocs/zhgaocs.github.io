@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/github.png">
+  <link rel="icon" href="/img/github.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhgaocs">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="C++线程管理1. std::thread::id类1.1 作用 std::thread和std::jthread对象的唯一标识符 作为有序和无序关联容器的键  1.2 构造函数默认构造函数构造不表示任何线程的 ID，原型如下： 1id() noexcept;  1.3 非成员函数 比较运算符：operator&#x3D;&#x3D;  operator&lt;等 输出运算符  123template &lt;cla">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Thread Management">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/10/09/thread-management/index.html">
+<meta property="og:site_name" content="zhgaocs">
+<meta property="og:description" content="C++线程管理1. std::thread::id类1.1 作用 std::thread和std::jthread对象的唯一标识符 作为有序和无序关联容器的键  1.2 构造函数默认构造函数构造不表示任何线程的 ID，原型如下： 1id() noexcept;  1.3 非成员函数 比较运算符：operator&#x3D;&#x3D;  operator&lt;等 输出运算符  123template &lt;cla">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-09T07:36:11.000Z">
+<meta property="article:modified_time" content="2023-10-09T07:38:17.315Z">
+<meta property="article:author" content="zhgaocs">
+<meta property="article:tag" content="cpp">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>C++ Thread Management - zhgaocs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhgaocs.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>zhgaocs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++ Thread Management"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-09 15:36" pubdate>
+          October 9, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k words
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C++ Thread Management</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="C-线程管理"><a href="#C-线程管理" class="headerlink" title="C++线程管理"></a>C++线程管理</h1><h2 id="1-std-thread-id类"><a href="#1-std-thread-id类" class="headerlink" title="1. std::thread::id类"></a>1. <code>std::thread::id</code>类</h2><h3 id="1-1-作用"><a href="#1-1-作用" class="headerlink" title="1.1 作用"></a>1.1 作用</h3><ul>
+<li><code>std::thread</code>和<code>std::jthread</code>对象的唯一标识符</li>
+<li>作为有序和无序关联容器的键</li>
+</ul>
+<h3 id="1-2-构造函数"><a href="#1-2-构造函数" class="headerlink" title="1.2 构造函数"></a>1.2 构造函数</h3><p>默认构造函数构造<strong>不表示任何线程的 ID</strong>，原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">id</span>() <span class="hljs-keyword">noexcept</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3-非成员函数"><a href="#1-3-非成员函数" class="headerlink" title="1.3 非成员函数"></a>1.3 非成员函数</h3><ul>
+<li>比较运算符：<code>operator==</code>  <code>operator&lt;</code>等</li>
+<li>输出运算符</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">CharT</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Traits</span>&gt;<br>std::basic_ostream&lt;CharT, Traits&gt; &amp;<br><span class="hljs-keyword">operator</span>&lt;&lt;(std::basic_ostream&lt;CharT, Traits&gt; &amp;ost, std::thread::id id);<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-4-注意"><a href="#1-4-注意" class="headerlink" title="1.4 注意"></a>1.4 注意</h3><ul>
+<li><code>std::thread::id</code>的实例可以不表示任何线程</li>
+<li>线程结束，<code>std::thread::id</code>的值可为另一线程复用</li>
+</ul>
+<h2 id="2-std-thread类"><a href="#2-std-thread类" class="headerlink" title="2. std::thread类"></a>2. <code>std::thread</code>类</h2><h3 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h3><p><code>std::thread</code>类表示单个执行线程，定义在头文件<code>&lt;thread&gt;</code>中<em>（C++11起）</em></p>
+<h3 id="2-2-成员函数"><a href="#2-2-成员函数" class="headerlink" title="2.2 成员函数"></a>2.2 成员函数</h3><h4 id="2-2-1-构造函数"><a href="#2-2-1-构造函数" class="headerlink" title="2.2.1 构造函数"></a>2.2.1 构造函数</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">thread</span>() <span class="hljs-keyword">noexcept</span>;<br><span class="hljs-built_in">thread</span>(<span class="hljs-type">const</span> thread &amp;) = <span class="hljs-keyword">delete</span>; <span class="hljs-comment">// std::thread对象不能拷贝</span><br><span class="hljs-built_in">thread</span>(thread &amp;&amp;other) <span class="hljs-keyword">noexcept</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Function</span>, <span class="hljs-keyword">class</span>... Args&gt;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">thread</span><span class="hljs-params">(Function &amp;&amp;f, Args &amp;...args)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>构造函数的参数是任何可调用对象，可以为函数名（函数指针）、仿函数（重载<code>operator()</code>的类）、<em>lambda</em>表达式</p>
+<ul>
+<li>函数名（函数指针）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-type">int</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    std::cout &lt;&lt; number &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(func, <span class="hljs-number">100</span>)</span></span>;   <span class="hljs-comment">// OK</span><br><span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(&amp;func, <span class="hljs-number">100</span>)</span></span>; <span class="hljs-comment">// OK</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>仿函数</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">background_task</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span><br><span class="hljs-function">    </span>&#123;<br>        std::cout &lt;&lt; std::this_thread::<span class="hljs-built_in">get_id</span>() &lt;&lt; std::endl;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(background_task&#123;&#125;)</span></span>;  <span class="hljs-comment">// OK</span><br>std::thread t1&#123;<span class="hljs-built_in">background_task</span>()&#125;; <span class="hljs-comment">// OK</span><br>std::thread t2&#123;background_task&#123;&#125;&#125;; <span class="hljs-comment">// OK</span><br><span class="hljs-function">std::thread <span class="hljs-title">t3</span><span class="hljs-params">(background_task())</span></span>; <span class="hljs-comment">// error</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><em>lambda</em>表达式</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">([]() -&gt; <span class="hljs-type">void</span> &#123; std::cout &lt;&lt; std::this_thread::get_id() &lt;&lt; std::endl; &#125;)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-析构函数"><a href="#2-2-2-析构函数" class="headerlink" title="2.2.2 析构函数"></a>2.2.2 析构函数</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">thread</span>();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>若<code>*this</code>拥有关联线程（<code>joinable() == true </code>），则调用<code>std::terminate()</code></li>
+<li>在下列操作后<code>std::thread</code>对象无关联的线程（可安全销毁）<ul>
+<li>被默认构造</li>
+<li>被移动</li>
+<li>已调用<code>join()</code></li>
+<li>已调用<code>detach()</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-3-赋值运算符"><a href="#2-2-3-赋值运算符" class="headerlink" title="2.2.3 赋值运算符"></a>2.2.3 赋值运算符</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">thread &amp;<span class="hljs-keyword">operator</span>=(thread &amp;&amp;other) <span class="hljs-keyword">noexcept</span>; <span class="hljs-comment">// std::thread类拷贝赋值运算符被定义为删除的函数</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>若<code>*this</code>仍拥有关联的运行中进程（即<code>joinable() == true</code>），则调用<code>std::terminate()</code> ；否则，赋值<code>other</code>的状态给<code>*this</code>并设置<code>other</code>为默认构造的状态</p>
+</li>
+<li><p>此调用后，<code>this-&gt;get_id() </code>等于<code>other.get_id()</code>在<code>operator=</code>调用前的值，而<code>other</code>不再表示执行的线程</p>
+</li>
+</ul>
+<h4 id="2-2-4-观察器"><a href="#2-2-4-观察器" class="headerlink" title="2.2.4 观察器"></a>2.2.4 观察器</h4><ul>
+<li><code>joinable</code>：检查<code>std::thread</code>对象是否标识<strong>活跃</strong>的执行线程。具体而言，若<code>get_id() != std::thread::id()</code>则返回<code>true</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">joinable</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    std::cout &lt;&lt; std::boolalpha;<br><br>    std::thread t;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;before starting, joinable: &quot;</span> &lt;&lt; t.<span class="hljs-built_in">joinable</span>() &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br><br>    t = std::thread&#123;foo&#125;;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;after starting, joinable: &quot;</span> &lt;&lt; t.<span class="hljs-built_in">joinable</span>() &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br><br>    t.<span class="hljs-built_in">join</span>();<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;after joining, joinable: &quot;</span> &lt;&lt; t.<span class="hljs-built_in">joinable</span>() &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br><br>    t = std::thread&#123;foo&#125;;<br>    t.<span class="hljs-built_in">detach</span>();<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;after detaching, joinable: &quot;</span> &lt;&lt; t.<span class="hljs-built_in">joinable</span>() &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">before</span> starting, joinable: <span class="hljs-literal">false</span><br><span class="hljs-keyword">after</span> starting, joinable: <span class="hljs-literal">true</span><br><span class="hljs-keyword">after</span> joining, joinable: <span class="hljs-literal">false</span><br><span class="hljs-keyword">after</span> detaching, joinable: <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>get_id</code>：返回线程ID。若无关联的线程，则返回默认构造的<code>std::thread::id</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::<span class="hljs-function">thread::id <span class="hljs-title">get_id</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">1</span>));<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(foo)</span></span>;<br>    std::thread::id t1_id = t1.<span class="hljs-built_in">get_id</span>();<br><br>    <span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(foo)</span></span>;<br>    std::thread::id t2_id = t2.<span class="hljs-built_in">get_id</span>();<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;t1&#x27;s id: &quot;</span> &lt;&lt; t1_id &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;t2&#x27;s id: &quot;</span> &lt;&lt; t2_id &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br><br>    t1.<span class="hljs-built_in">join</span>();<br>    t2.<span class="hljs-built_in">join</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可能的输出：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ada">t1<span class="hljs-symbol">&#x27;s</span> id: <span class="hljs-number">2</span><br>t2<span class="hljs-symbol">&#x27;s</span> id: <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>native_handle</code>：返回实现定义的底层线程柄</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ++">native_handle_type native_handle();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>hardware_concurrency</code>：返回实现支持的并发线程数</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">hardware_concurrency</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-2-5-操作"><a href="#2-2-5-操作" class="headerlink" title="2.2.5 操作"></a>2.2.5 操作</h4><ul>
+<li><code>join</code>：阻塞当前线程直至 <code>*this</code>所标识的线程结束其执行</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">join</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>detach</code>：使<code>thread</code>对象的执行线程独立运行，并在结束时自动释放资源。调用后，<code>*this</code>不再关联任何线程。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">detach</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br> <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">independentThread</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Starting concurrent thread.\n&quot;</span>;<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">2</span>));<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Exiting concurrent thread.\n&quot;</span>;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">threadCaller</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Starting thread caller.\n&quot;</span>;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(independentThread)</span></span>;<br>    t.<span class="hljs-built_in">detach</span>();<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">1</span>));<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Exiting thread caller.\n&quot;</span>;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">threadCaller</span>();<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">5</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可能的输出：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arduino">Starting thread caller.<br>Starting concurrent thread.<br>Exiting thread caller.<br>Exiting concurrent thread.<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>swap</code>：交换两个<code>thread</code>对象的底层柄</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(std::thread &amp;other)</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-非成员函数"><a href="#2-3-非成员函数" class="headerlink" title="2.3 非成员函数"></a>2.3 非成员函数</h3><ul>
+<li><code>std::swap</code>：交换<code>lhs</code>与<code>rhs</code>的状态，等效调用<code>lhs.swap(rhs)</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(std::thread &amp;lhs, std::thread &amp;rhs)</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Language/" class="category-chain-item">Language</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Language/Concurrency/" class="category-chain-item">Concurrency</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/cpp/" class="print-no-link">#cpp</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"zhgaocs/zhgaocs.github.io","repo-id":"R_kgDOKEb5DA","category":"Announcements","category-id":"DIC_kwDOKEb5DM4CZqPN","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+        <span>Powered by</span> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <span>&</span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

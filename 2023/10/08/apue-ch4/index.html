@@ -24,7 +24,7 @@
 <meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 4  文件和目录1. stat、fstat和lstat函数1.1 功能获取文件有关信息，其中lstat获取符号链接本身的信息，并不是链接所指向的文件的信息 1.2 函数原型123456#include &lt;sys&#x2F;stat.h&gt;&#x2F;&#x2F; 成功返回0，出错返回-1int stat(cons">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-10-08T15:40:06.000Z">
-<meta property="article:modified_time" content="2023-10-08T15:48:02.146Z">
+<meta property="article:modified_time" content="2023-10-09T07:28:41.552Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -505,7 +505,8 @@
 </ul>
 </li>
 </ul>
-<h3 id="15-3-rmdir函数"><a href="#15-3-rmdir函数" class="headerlink" title="15.3 rmdir函数"></a>15.3 <code>rmdir</code>函数</h3><h4 id="15-3-1-功能"><a href="#15-3-1-功能" class="headerlink" title="15.3.1 功能"></a>15.3.1 功能</h4><h4 id="15-3-2-函数原型"><a href="#15-3-2-函数原型" class="headerlink" title="15.3.2 函数原型"></a>15.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">rmdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> pathname)</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="15-3-rmdir函数"><a href="#15-3-rmdir函数" class="headerlink" title="15.3 rmdir函数"></a>15.3 <code>rmdir</code>函数</h3><h4 id="15-3-1-功能"><a href="#15-3-1-功能" class="headerlink" title="15.3.1 功能"></a>15.3.1 功能</h4><p>删除空目录</p>
+<h4 id="15-3-2-函数原型"><a href="#15-3-2-函数原型" class="headerlink" title="15.3.2 函数原型"></a>15.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">rmdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> pathname)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="15-4-remove函数"><a href="#15-4-remove函数" class="headerlink" title="15.4 remove函数"></a>15.4 <code>remove</code>函数</h3><h4 id="15-4-1-功能"><a href="#15-4-1-功能" class="headerlink" title="15.4.1 功能"></a>15.4.1 功能</h4><ul>
 <li>对于文件：<code>remove</code>与<code>unlink</code>功能相同</li>
@@ -600,8 +601,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  <a href="/categories/Reading-Notes/" class="category-chain-item">Reading Notes</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/Reading-Notes/APUE/" class="category-chain-item">APUE</a>
+  
+  
+
   
 
       </span>
