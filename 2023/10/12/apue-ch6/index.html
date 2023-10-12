@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/github.png">
+  <link rel="icon" href="/img/github.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhgaocs">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 6 系统数据文件和信息1. 口令文件1.1 位置&#x2F;etc&#x2F;passwd 1.2 结构体passwd123456789101112#include &lt;pwd.h&gt;struct passwd&amp;#123;    char *pw_name;   &#x2F;* username *&#x2F;    cha">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APUE Chapter 6 - System Data Files and Information">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/10/12/apue-ch6/index.html">
+<meta property="og:site_name" content="zhgaocs">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 6 系统数据文件和信息1. 口令文件1.1 位置&#x2F;etc&#x2F;passwd 1.2 结构体passwd123456789101112#include &lt;pwd.h&gt;struct passwd&amp;#123;    char *pw_name;   &#x2F;* username *&#x2F;    cha">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhgaocs.github.io/images/relationship.png">
+<meta property="article:published_time" content="2023-10-12T13:41:55.000Z">
+<meta property="article:modified_time" content="2023-10-12T13:52:15.032Z">
+<meta property="article:author" content="zhgaocs">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://zhgaocs.github.io/images/relationship.png">
+  
+  
+  
+  <title>APUE Chapter 6 - System Data Files and Information - zhgaocs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhgaocs.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>zhgaocs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="APUE Chapter 6 - System Data Files and Information"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-12 21:41" pubdate>
+          October 12, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k words
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">APUE Chapter 6 - System Data Files and Information</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-6-系统数据文件和信息"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-6-系统数据文件和信息" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 6 系统数据文件和信息"></a>Advanced Programming in the UNIX Environment—Chapter 6 系统数据文件和信息</h1><h2 id="1-口令文件"><a href="#1-口令文件" class="headerlink" title="1. 口令文件"></a>1. 口令文件</h2><h3 id="1-1-位置"><a href="#1-1-位置" class="headerlink" title="1.1 位置"></a>1.1 位置</h3><p><code>/etc/passwd</code></p>
+<h3 id="1-2-结构体passwd"><a href="#1-2-结构体passwd" class="headerlink" title="1.2 结构体passwd"></a>1.2 结构体<code>passwd</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pwd.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">passwd</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> *pw_name;   <span class="hljs-comment">/* username */</span><br>    <span class="hljs-type">char</span> *pw_passwd; <span class="hljs-comment">/* encrypted user password */</span><br>    <span class="hljs-type">uid_t</span> pw_uid;    <span class="hljs-comment">/* user ID */</span><br>    <span class="hljs-type">gid_t</span> pw_gid;    <span class="hljs-comment">/* group ID */</span><br>    <span class="hljs-type">char</span> *pw_gecos;  <span class="hljs-comment">/* user information */</span><br>    <span class="hljs-type">char</span> *pw_dir;    <span class="hljs-comment">/* home directory */</span><br>    <span class="hljs-type">char</span> *pw_shell;  <span class="hljs-comment">/* shell program */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3-getpwuid和getpwnam函数"><a href="#1-3-getpwuid和getpwnam函数" class="headerlink" title="1.3 getpwuid和getpwnam函数"></a>1.3 <code>getpwuid</code>和<code>getpwnam</code>函数</h3><h4 id="1-3-1-功能"><a href="#1-3-1-功能" class="headerlink" title="1.3.1 功能"></a>1.3.1 功能</h4><p>获取用户的口令文件项</p>
+<h4 id="1-3-2-函数原型"><a href="#1-3-2-函数原型" class="headerlink" title="1.3.2 函数原型"></a>1.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pwd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回对应指针，出错返回NULL</span><br><span class="hljs-keyword">struct</span> passwd *<span class="hljs-title function_">getpwuid</span><span class="hljs-params">(<span class="hljs-type">uid_t</span> uid)</span>;<br><span class="hljs-keyword">struct</span> passwd *<span class="hljs-title function_">getpwnam</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-3-3-应用"><a href="#1-3-3-应用" class="headerlink" title="1.3.3 应用"></a>1.3.3 应用</h4><p><code>ls</code>程序使用<code>getpwuid</code>函数</p>
+<p><code>login</code>程序使用<code>getpwnam</code>函数</p>
+<h3 id="1-4-getpwent、setpwent和endpwent函数"><a href="#1-4-getpwent、setpwent和endpwent函数" class="headerlink" title="1.4 getpwent、setpwent和endpwent函数"></a>1.4 <code>getpwent</code>、<code>setpwent</code>和<code>endpwent</code>函数</h3><h4 id="1-4-1-功能"><a href="#1-4-1-功能" class="headerlink" title="1.4.1 功能"></a>1.4.1 功能</h4><ul>
+<li><code>getpwent</code>：自动打开密码文件，并按顺序读取各项</li>
+<li><code>setpwent</code>：将文件指针重置回密码文件的起始处</li>
+<li><code>endpwent</code>：关闭密码文件</li>
+</ul>
+<h4 id="1-4-2-函数原型"><a href="#1-4-2-函数原型" class="headerlink" title="1.4.2 函数原型"></a>1.4.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pwd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回指针，出错或到达文件结尾返回NULL</span><br><span class="hljs-keyword">struct</span> passwd *<span class="hljs-title function_">getpwent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">setpwent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">endpwent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-4-3-实现getpwnam函数"><a href="#1-4-3-实现getpwnam函数" class="headerlink" title="1.4.3 实现getpwnam函数"></a>1.4.3 实现<code>getpwnam</code>函数</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pwd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stddef.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> passwd *<br><span class="hljs-title function_">getpwnam</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">passwd</span> *<span class="hljs-title">ptr</span>;</span><br><br>    setpwent();<br>    <span class="hljs-keyword">while</span> ((ptr = getpwent()) != <span class="hljs-literal">NULL</span>) <span class="hljs-comment">// getpwent return value may point to a static area</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(name, ptr-&gt;pw_name) == <span class="hljs-number">0</span>)<br>            <span class="hljs-keyword">break</span>; <span class="hljs-comment">/* found a match */</span><br>    &#125;<br>    endpwent();<br>    <span class="hljs-keyword">return</span> ptr; <span class="hljs-comment">/* ptr is NULL if no match found */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-阴影口令"><a href="#2-阴影口令" class="headerlink" title="2. 阴影口令"></a>2. 阴影口令</h2><h3 id="2-1-位置"><a href="#2-1-位置" class="headerlink" title="2.1 位置"></a>2.1 位置</h3><p><code>/etc/shadow</code></p>
+<h3 id="2-2-结构体spwd"><a href="#2-2-结构体spwd" class="headerlink" title="2.2 结构体spwd"></a>2.2 结构体<code>spwd</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;shadow.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spwd</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> *sp_namp;             <span class="hljs-comment">/* user login name */</span><br>    <span class="hljs-type">char</span> *sp_pwdp;             <span class="hljs-comment">/* encrypted password */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_lstchg;        <span class="hljs-comment">/* time since the last password change */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_min;           <span class="hljs-comment">/* minimum days before allowed change */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_max;           <span class="hljs-comment">/* maximum days before required change */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_warn;          <span class="hljs-comment">/* number of days for password expiration warning */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_inact;         <span class="hljs-comment">/* number of days before the account becomes inactive */</span><br>    <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_expire;        <span class="hljs-comment">/* number of days until the account expires */</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> sp_flag; <span class="hljs-comment">/* reserved */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-函数"><a href="#2-3-函数" class="headerlink" title="2.3 函数"></a>2.3 函数</h3><p>功能类似1.3、1.4节函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;shadow.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回指针，出错返回NULL</span><br><span class="hljs-keyword">struct</span> spwd *<span class="hljs-title function_">getspnam</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br><span class="hljs-keyword">struct</span> spwd *<span class="hljs-title function_">getspent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">setspent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">endspent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-组文件"><a href="#3-组文件" class="headerlink" title="3. 组文件"></a>3. 组文件</h2><h3 id="3-1-位置"><a href="#3-1-位置" class="headerlink" title="3.1 位置"></a>3.1 位置</h3><p><code>/etc/group</code></p>
+<h3 id="3-2-结构体group"><a href="#3-2-结构体group" class="headerlink" title="3.2 结构体group"></a>3.2 结构体<code>group</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;grp.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">group</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> *gr_name;   <span class="hljs-comment">/* group name */</span><br>    <span class="hljs-type">char</span> *gr_passwd; <span class="hljs-comment">/* password */</span><br>    <span class="hljs-type">int</span> gr_gid;      <span class="hljs-comment">/* group ID */</span><br>    <span class="hljs-type">char</span> **gr_mem;   <span class="hljs-comment">/* list of group members */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-3-函数"><a href="#3-3-函数" class="headerlink" title="3.3 函数"></a>3.3 函数</h3><p>功能类似1.3、1.4节函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;grp.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回指针，出错返回NULL</span><br><span class="hljs-keyword">struct</span> group *<span class="hljs-title function_">getgrgid</span><span class="hljs-params">(<span class="hljs-type">gid_t</span> gid)</span>;<br><span class="hljs-keyword">struct</span> group *<span class="hljs-title function_">getgrnam</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span>;<br><br><span class="hljs-keyword">struct</span> group *<span class="hljs-title function_">getgrent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">setgrent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">endgrent</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-附加组ID"><a href="#4-附加组ID" class="headerlink" title="4. 附加组ID"></a>4. 附加组ID</h2><h3 id="4-1-initgroups函数"><a href="#4-1-initgroups函数" class="headerlink" title="4.1 initgroups函数"></a>4.1 <code>initgroups</code>函数</h3><h4 id="4-1-1-功能"><a href="#4-1-1-功能" class="headerlink" title="4.1.1 功能"></a>4.1.1 功能</h4><p>初始化用户的附加组</p>
+<h4 id="4-1-2-函数原型"><a href="#4-1-2-函数原型" class="headerlink" title="4.1.2 函数原型"></a>4.1.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;grp.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">initgroups</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *username, <span class="hljs-type">gid_t</span> basegid)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-getgroups函数"><a href="#4-2-getgroups函数" class="headerlink" title="4.2 getgroups函数"></a>4.2 <code>getgroups</code>函数</h3><h4 id="4-2-1-功能"><a href="#4-2-1-功能" class="headerlink" title="4.2.1 功能"></a>4.2.1 功能</h4><p>获取进程的附加组ID</p>
+<h4 id="4-2-2-函数原型"><a href="#4-2-2-函数原型" class="headerlink" title="4.2.2 函数原型"></a>4.2.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回附加组ID数，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">getgroups</span><span class="hljs-params">(<span class="hljs-type">int</span> gidsetsize, <span class="hljs-type">gid_t</span> grouplist[])</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-setgroups函数"><a href="#4-3-setgroups函数" class="headerlink" title="4.3 setgroups函数"></a>4.3 <code>setgroups</code>函数</h3><h4 id="4-3-1-功能"><a href="#4-3-1-功能" class="headerlink" title="4.3.1 功能"></a>4.3.1 功能</h4><p>设置进程的附加组ID</p>
+<h4 id="4-3-2-函数原型"><a href="#4-3-2-函数原型" class="headerlink" title="4.3.2 函数原型"></a>4.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;grp.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setgroups</span><span class="hljs-params">(<span class="hljs-type">int</span> ngroups, <span class="hljs-type">const</span> <span class="hljs-type">gid_t</span> grouplist[])</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-系统标识"><a href="#5-系统标识" class="headerlink" title="5. 系统标识"></a>5. 系统标识</h2><h3 id="5-1-uname函数"><a href="#5-1-uname函数" class="headerlink" title="5.1 uname函数"></a>5.1 <code>uname</code>函数</h3><h4 id="5-1-1-功能"><a href="#5-1-1-功能" class="headerlink" title="5.1.1 功能"></a>5.1.1 功能</h4><p>返回当前主机和操作系统有关的信息</p>
+<h4 id="5-1-2-结构体utsname"><a href="#5-1-2-结构体utsname" class="headerlink" title="5.1.2 结构体utsname"></a>5.1.2 结构体<code>utsname</code></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/utsname.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">utsname</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span> sysname[];  <span class="hljs-comment">/* name of the operating system */</span><br>    <span class="hljs-type">char</span> nodename[]; <span class="hljs-comment">/* name of this node */</span><br>    <span class="hljs-type">char</span> release[];  <span class="hljs-comment">/* current release of operating system */</span><br>    <span class="hljs-type">char</span> version[];  <span class="hljs-comment">/* current version of this release */</span><br>    <span class="hljs-type">char</span> machine[];  <span class="hljs-comment">/* name of hardware type */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h4 id="5-1-3-函数原型"><a href="#5-1-3-函数原型" class="headerlink" title="5.1.3 函数原型"></a>5.1.3 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/utsname.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回非负值，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">uname</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> utsname *name)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-gethostname函数"><a href="#5-2-gethostname函数" class="headerlink" title="5.2 gethostname函数"></a>5.2 <code>gethostname</code>函数</h3><h4 id="5-2-1-功能"><a href="#5-2-1-功能" class="headerlink" title="5.2.1 功能"></a>5.2.1 功能</h4><p>获取主机名（通常是TCP&#x2F;IP网络上的主机）</p>
+<h4 id="5-2-2-函数原型"><a href="#5-2-2-函数原型" class="headerlink" title="5.2.2 函数原型"></a>5.2.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">gethostname</span><span class="hljs-params">(<span class="hljs-type">char</span> *name, <span class="hljs-type">int</span> namelen)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="6-时间和日期例程"><a href="#6-时间和日期例程" class="headerlink" title="6. 时间和日期例程"></a>6. 时间和日期例程</h2><h3 id="6-1-与时间有关的类型"><a href="#6-1-与时间有关的类型" class="headerlink" title="6.1 与时间有关的类型"></a>6.1 与时间有关的类型</h3><h4 id="6-1-1-time-t"><a href="#6-1-1-time-t" class="headerlink" title="6.1.1 time_t"></a>6.1.1 <code>time_t</code></h4><p><code>time_t</code>表示自1970年1月1日以来的秒数</p>
+<h4 id="6-1-2-结构体timeval"><a href="#6-1-2-结构体timeval" class="headerlink" title="6.1.2 结构体timeval"></a>6.1.2 结构体<code>timeval</code></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/time.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timeval</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">long</span> tv_sec;  <span class="hljs-comment">/* seconds */</span><br>    <span class="hljs-type">long</span> tv_usec; <span class="hljs-comment">/* microseconds */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-1-3-结构体timezone"><a href="#6-1-3-结构体timezone" class="headerlink" title="6.1.3 结构体timezone"></a>6.1.3 结构体<code>timezone</code></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/time.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timezone</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> tz_minuteswest; <span class="hljs-comment">/* of Greenwich */</span><br>    <span class="hljs-type">int</span> tz_dsttime;     <span class="hljs-comment">/* type of dst correction to apply */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-1-4-结构体tm"><a href="#6-1-4-结构体tm" class="headerlink" title="6.1.4 结构体tm"></a>6.1.4 结构体<code>tm</code></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tm</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> tm_sec;   <span class="hljs-comment">/* seconds after the minute: [0-60] */</span><br>    <span class="hljs-type">int</span> tm_min;   <span class="hljs-comment">/* minutes after the hour: [0-59] */</span><br>    <span class="hljs-type">int</span> tm_hour;  <span class="hljs-comment">/* hours after the midnight: [0-23] */</span><br>    <span class="hljs-type">int</span> tm_mday;  <span class="hljs-comment">/* day of the month: [1-31] */</span><br>    <span class="hljs-type">int</span> tm_mon;   <span class="hljs-comment">/* months since January: [0-11] */</span><br>    <span class="hljs-type">int</span> tm_year;  <span class="hljs-comment">/* years since 1900 */</span><br>    <span class="hljs-type">int</span> tm_wday;  <span class="hljs-comment">/* days since Sunday: [0-6] */</span><br>    <span class="hljs-type">int</span> tm_yday;  <span class="hljs-comment">/* days since January 1: [0-365] */</span><br>    <span class="hljs-type">int</span> tm_isdst; <span class="hljs-comment">/* daylight saving time flag */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-时间获取"><a href="#6-2-时间获取" class="headerlink" title="6.2 时间获取"></a>6.2 时间获取</h3><h4 id="6-2-1-time函数"><a href="#6-2-1-time函数" class="headerlink" title="6.2.1 time函数"></a>6.2.1 <code>time</code>函数</h4><p>获取自1970年1月1日以来的秒数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回时间值，出错返回-1</span><br><span class="hljs-type">time_t</span> <span class="hljs-title function_">time</span><span class="hljs-params">(<span class="hljs-type">time_t</span> *calptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-2-2-gettimeofday"><a href="#6-2-2-gettimeofday" class="headerlink" title="6.2.2 gettimeofday"></a>6.2.2 <code>gettimeofday</code></h4><p>获取当前精确时间（微秒级）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/time.h&gt;</span></span><br><br><span class="hljs-comment">// 总是返回0</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">gettimeofday</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> timeval *tv, <span class="hljs-keyword">struct</span> timezone *tz)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-时间转换"><a href="#6-3-时间转换" class="headerlink" title="6.3 时间转换"></a>6.3 时间转换</h3><h4 id="6-3-1-gmtime和localtime函数"><a href="#6-3-1-gmtime和localtime函数" class="headerlink" title="6.3.1 gmtime和localtime函数"></a>6.3.1 <code>gmtime</code>和<code>localtime</code>函数</h4><ul>
+<li><code>gmtime</code>：将日历时间转换为国际标准时间</li>
+<li><code>localtime</code>：将日历时间转换为本地时间</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">// 返回指向结构体tm的指针</span><br><span class="hljs-keyword">struct</span> tm *<span class="hljs-title function_">gmtime</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">time_t</span> *calptr)</span>;<br><span class="hljs-keyword">struct</span> tm *<span class="hljs-title function_">localtime</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">time_t</span> *calptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-3-2-mktime函数"><a href="#6-3-2-mktime函数" class="headerlink" title="6.3.2 mktime函数"></a>6.3.2 <code>mktime</code>函数</h4><p><code>struct tm</code>转换为<code>time_t</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回日历时间，出错返回-1</span><br><span class="hljs-type">time_t</span> <span class="hljs-title function_">mktime</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> tm *tmptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-3-3-asctime和ctime函数"><a href="#6-3-3-asctime和ctime函数" class="headerlink" title="6.3.3 asctime和ctime函数"></a>6.3.3 <code>asctime</code>和<code>ctime</code>函数</h4><p>将日期表示转换为26字节的字符串形式，例如：<code>Tue Feb 10 18:27:38 2004\n\0</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">// 返回以null结尾的字符串的指针</span><br><span class="hljs-type">char</span> *<span class="hljs-title function_">asctime</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> tm *timeptr)</span>;<br><span class="hljs-type">char</span> *<span class="hljs-title function_">ctime</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">time_t</span> *time)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-3-4-strftime函数"><a href="#6-3-4-strftime函数" class="headerlink" title="6.3.4 strftime函数"></a>6.3.4 <code>strftime</code>函数</h4><p>根据指定的格式将<code>struct tm</code>类型的时间信息转换为一个字符串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">// 若有空间则返回存入数组的字符数，否则返回0</span><br><span class="hljs-type">size_t</span> <span class="hljs-title function_">strftime</span><span class="hljs-params">(<span class="hljs-type">char</span> *str, <span class="hljs-type">size_t</span> maxsize, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *format, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> tm *timeptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-4-时间函数之间的关系"><a href="#6-4-时间函数之间的关系" class="headerlink" title="6.4 时间函数之间的关系"></a>6.4 时间函数之间的关系</h3><p><img src="/./images/relationship.png" srcset="/img/loading.gif" lazyload alt="各个时间函数之间的关系"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reading-Notes/" class="category-chain-item">Reading Notes</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Reading-Notes/APUE/" class="category-chain-item">APUE</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/" class="print-no-link">#linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"zhgaocs/zhgaocs.github.io","repo-id":"R_kgDOKEb5DA","category":"Announcements","category-id":"DIC_kwDOKEb5DM4CZqPN","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+        <span>Powered by</span> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <span>&</span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
