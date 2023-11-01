@@ -16,26 +16,26 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 7  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1.">
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 07  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="APUE Chapter 7 - Process Environment">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/index.html">
+<meta property="og:title" content="APUE Chapter 07 - Process Environment">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/09/29/apue-ch07/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 7  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1.">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 07  进程环境1. 进程终止1.1 进程终止方式1.1.1 正常终止 main返回 调用exit 调用_exit或_Exit 最后一个线程从启动例程返回 最后一个线程调用pthread_exit  1.1.2 异常终止 调用abort 接到一个信号并终止 最后一个线程对取消请求做出响应  1">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/c_startup_termination.png">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/environ.png">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/memory_arrangement.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch07/c_startup_termination.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch07/environ.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch07/memory_arrangement.png">
 <meta property="article:published_time" content="2023-09-29T10:08:01.000Z">
-<meta property="article:modified_time" content="2023-10-09T07:28:47.460Z">
+<meta property="article:modified_time" content="2023-11-01T10:36:09.079Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch7/c_startup_termination.png">
+<meta name="twitter:image" content="https://zhgaocs.github.io/2023/09/29/apue-ch07/c_startup_termination.png">
   
   
   
-  <title>APUE Chapter 7 - Process Environment - zhgaocs</title>
+  <title>APUE Chapter 07 - Process Environment - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -183,13 +183,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="APUE Chapter 7 - Process Environment"></span>
+            <span id="subtitle" data-typed-text="APUE Chapter 07 - Process Environment"></span>
           
         </div>
 
@@ -264,12 +264,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">APUE Chapter 7 - Process Environment</h1>
+            <h1 id="seo-header">APUE Chapter 07 - Process Environment</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-7-进程环境"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-7-进程环境" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 7  进程环境"></a>Advanced Programming in the UNIX Environment—Chapter 7  进程环境</h1><h2 id="1-进程终止"><a href="#1-进程终止" class="headerlink" title="1. 进程终止"></a>1. 进程终止</h2><h3 id="1-1-进程终止方式"><a href="#1-1-进程终止方式" class="headerlink" title="1.1 进程终止方式"></a>1.1 进程终止方式</h3><h4 id="1-1-1-正常终止"><a href="#1-1-1-正常终止" class="headerlink" title="1.1.1 正常终止"></a>1.1.1 正常终止</h4><ul>
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-07-进程环境"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-07-进程环境" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 07  进程环境"></a>Advanced Programming in the UNIX Environment—Chapter 07  进程环境</h1><h2 id="1-进程终止"><a href="#1-进程终止" class="headerlink" title="1. 进程终止"></a>1. 进程终止</h2><h3 id="1-1-进程终止方式"><a href="#1-1-进程终止方式" class="headerlink" title="1.1 进程终止方式"></a>1.1 进程终止方式</h3><h4 id="1-1-1-正常终止"><a href="#1-1-1-正常终止" class="headerlink" title="1.1.1 正常终止"></a>1.1.1 正常终止</h4><ul>
 <li><code>main</code>返回</li>
 <li>调用<code>exit</code></li>
 <li>调用<code>_exit</code>或<code>_Exit</code></li>
@@ -305,19 +305,19 @@
 <h3 id="1-3-atexit函数"><a href="#1-3-atexit函数" class="headerlink" title="1.3 atexit函数"></a>1.3 <code>atexit</code>函数</h3><h4 id="1-3-1-功能"><a href="#1-3-1-功能" class="headerlink" title="1.3.1 功能"></a>1.3.1 功能</h4><p>注册程序<strong>正常终止</strong>时执行的函数。<code>atexit</code> 函数可以多次调用，以注册多个退出处理函数，这些函数将按照注册的顺序逆序执行</p>
 <h4 id="1-3-2-函数原型"><a href="#1-3-2-函数原型" class="headerlink" title="1.3.2 函数原型"></a>1.3.2 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">atexit</span><span class="hljs-params">(<span class="hljs-type">void</span> (*func)(<span class="hljs-type">void</span>))</span>;<br></code></pre></td></tr></table></figure>
 
-<h4 id="1-3-3-C程序启动和终止"><a href="#1-3-3-C程序启动和终止" class="headerlink" title="1.3.3 C程序启动和终止"></a>1.3.3 C程序启动和终止</h4><p><img src="/2023/09/29/apue-ch7/c_startup_termination.png" srcset="/img/loading.gif" lazyload alt="C程序的启动和终止"></p>
+<h4 id="1-3-3-C程序启动和终止"><a href="#1-3-3-C程序启动和终止" class="headerlink" title="1.3.3 C程序启动和终止"></a>1.3.3 C程序启动和终止</h4><p><img src="/2023/09/29/apue-ch07/c_startup_termination.png" srcset="/img/loading.gif" lazyload alt="C程序的启动和终止"></p>
 <h2 id="2-环境表"><a href="#2-环境表" class="headerlink" title="2. 环境表"></a>2. 环境表</h2><h3 id="2-1-声明"><a href="#2-1-声明" class="headerlink" title="2.1 声明"></a>2.1 声明</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">extern</span> <span class="hljs-type">char</span> **environ;<br></code></pre></td></tr></table></figure>
 
 <h3 id="2-2-类型"><a href="#2-2-类型" class="headerlink" title="2.2 类型"></a>2.2 类型</h3><ul>
 <li><strong>全局变量</strong></li>
 <li>字符指针数组（每个字符指针指向以null字符结尾的字符串，字符串格式：<em>name&#x3D;value</em>）</li>
 </ul>
-<p><img src="/2023/09/29/apue-ch7/environ.png" srcset="/img/loading.gif" lazyload alt="5个C字符串组成的环境表"></p>
+<p><img src="/2023/09/29/apue-ch07/environ.png" srcset="/img/loading.gif" lazyload alt="5个C字符串组成的环境表"></p>
 <h3 id="2-3-注意"><a href="#2-3-注意" class="headerlink" title="2.3 注意"></a>2.3 注意</h3><ul>
 <li>每个程序都会接收到一张环境表</li>
 <li>查看整个环境，使用<code>environ</code>指针；用<code>getenv</code>和<code>putenv</code>函数访问和修改特定环境变量</li>
 </ul>
-<h2 id="3-C程序的存储空间布局"><a href="#3-C程序的存储空间布局" class="headerlink" title="3. C程序的存储空间布局"></a>3. C程序的存储空间布局</h2><p><img src="/2023/09/29/apue-ch7/memory_arrangement.png" srcset="/img/loading.gif" lazyload alt="典型的存储器安排"></p>
+<h2 id="3-C程序的存储空间布局"><a href="#3-C程序的存储空间布局" class="headerlink" title="3. C程序的存储空间布局"></a>3. C程序的存储空间布局</h2><p><img src="/2023/09/29/apue-ch07/memory_arrangement.png" srcset="/img/loading.gif" lazyload alt="典型的存储器安排"></p>
 <h2 id="4-共享库"><a href="#4-共享库" class="headerlink" title="4. 共享库"></a>4. 共享库</h2><h3 id="4-1-优缺点"><a href="#4-1-优缺点" class="headerlink" title="4.1 优缺点"></a>4.1 优缺点</h3><ul>
 <li>优点<ul>
 <li>可执行文件体积较小</li>

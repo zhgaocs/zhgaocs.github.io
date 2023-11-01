@@ -16,24 +16,24 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 5 标准I&#x2F;O库1. 流的定向1.1 概念流的定向决定了读写的字符是单字节还是多字节。流最初被创建时，没有定向 1.2 分类 宽定向：多字节 字节定向：单字节  1.3 fwide函数1.3.1 功能设置或查询流的定向属性 1.3.2 函数原型123456789#include &amp;l">
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 05 标准I&#x2F;O库1. 流的定向1.1 概念流的定向决定了读写的字符是单字节还是多字节。流最初被创建时，没有定向 1.2 分类 宽定向：多字节 字节定向：单字节  1.3 fwide函数1.3.1 功能设置或查询流的定向属性 1.3.2 函数原型123456789#include &amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="APUE Chapter 5 - Standard I&#x2F;O Library">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/10/25/apue-ch5/index.html">
+<meta property="og:title" content="APUE Chapter 05 - Standard I&#x2F;O Library">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/10/25/apue-ch05/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 5 标准I&#x2F;O库1. 流的定向1.1 概念流的定向决定了读写的字符是单字节还是多字节。流最初被创建时，没有定向 1.2 分类 宽定向：多字节 字节定向：单字节  1.3 fwide函数1.3.1 功能设置或查询流的定向属性 1.3.2 函数原型123456789#include &amp;l">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 05 标准I&#x2F;O库1. 流的定向1.1 概念流的定向决定了读写的字符是单字节还是多字节。流最初被创建时，没有定向 1.2 分类 宽定向：多字节 字节定向：单字节  1.3 fwide函数1.3.1 功能设置或查询流的定向属性 1.3.2 函数原型123456789#include &amp;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/10/25/apue-ch5/setbuf_setvbuf.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/10/25/apue-ch05/setbuf_setvbuf.png">
 <meta property="article:published_time" content="2023-10-25T10:50:02.000Z">
-<meta property="article:modified_time" content="2023-10-26T01:10:22.177Z">
+<meta property="article:modified_time" content="2023-11-01T10:35:26.009Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://zhgaocs.github.io/2023/10/25/apue-ch5/setbuf_setvbuf.png">
+<meta name="twitter:image" content="https://zhgaocs.github.io/2023/10/25/apue-ch05/setbuf_setvbuf.png">
   
   
   
-  <title>APUE Chapter 5 - Standard I/O Library - zhgaocs</title>
+  <title>APUE Chapter 05 - Standard I/O Library - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -181,13 +181,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="APUE Chapter 5 - Standard I/O Library"></span>
+            <span id="subtitle" data-typed-text="APUE Chapter 05 - Standard I/O Library"></span>
           
         </div>
 
@@ -262,12 +262,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">APUE Chapter 5 - Standard I/O Library</h1>
+            <h1 id="seo-header">APUE Chapter 05 - Standard I/O Library</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-5-标准I-O库"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-5-标准I-O库" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 5 标准I&#x2F;O库"></a>Advanced Programming in the UNIX Environment—Chapter 5 标准I&#x2F;O库</h1><h2 id="1-流的定向"><a href="#1-流的定向" class="headerlink" title="1. 流的定向"></a>1. 流的定向</h2><h3 id="1-1-概念"><a href="#1-1-概念" class="headerlink" title="1.1 概念"></a>1.1 概念</h3><p>流的定向决定了读写的字符是单字节还是多字节。<strong>流最初被创建时，没有定向</strong></p>
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-05-标准I-O库"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-05-标准I-O库" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 05 标准I&#x2F;O库"></a>Advanced Programming in the UNIX Environment—Chapter 05 标准I&#x2F;O库</h1><h2 id="1-流的定向"><a href="#1-流的定向" class="headerlink" title="1. 流的定向"></a>1. 流的定向</h2><h3 id="1-1-概念"><a href="#1-1-概念" class="headerlink" title="1.1 概念"></a>1.1 概念</h3><p>流的定向决定了读写的字符是单字节还是多字节。<strong>流最初被创建时，没有定向</strong></p>
 <h3 id="1-2-分类"><a href="#1-2-分类" class="headerlink" title="1.2 分类"></a>1.2 分类</h3><ul>
 <li>宽定向：多字节</li>
 <li>字节定向：单字节</li>
@@ -292,14 +292,14 @@
 <li><p>不缓冲：不对字符进行缓冲存储。<code>stderr</code>通常不带缓冲</p>
 </li>
 </ul>
-<h3 id="2-2-更改缓冲类型"><a href="#2-2-更改缓冲类型" class="headerlink" title="2.2 更改缓冲类型"></a>2.2 更改缓冲类型</h3><h4 id="2-2-1-函数原型"><a href="#2-2-1-函数原型" class="headerlink" title="2.2.1 函数原型"></a>2.2.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回非0值</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">setbuf</span><span class="hljs-params">(FILE *<span class="hljs-keyword">restrict</span> fp, <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> buf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">setvbuf</span><span class="hljs-params">(FILE *<span class="hljs-keyword">restrict</span> fp, <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> buf, <span class="hljs-type">int</span> mode, <span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="2-2-更改缓冲类型"><a href="#2-2-更改缓冲类型" class="headerlink" title="2.2 更改缓冲类型"></a>2.2 更改缓冲类型</h3><h4 id="2-2-1-函数原型"><a href="#2-2-1-函数原型" class="headerlink" title="2.2.1 函数原型"></a>2.2.1 函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">setbuf</span><span class="hljs-params">(FILE *<span class="hljs-keyword">restrict</span> fp, <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> buf)</span>;<br><span class="hljs-comment">// 成功返回0，出错返回非0值</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setvbuf</span><span class="hljs-params">(FILE *<span class="hljs-keyword">restrict</span> fp, <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> buf, <span class="hljs-type">int</span> mode, <span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
 
 <h4 id="2-2-2-参数mode"><a href="#2-2-2-参数mode" class="headerlink" title="2.2.2 参数mode"></a>2.2.2 参数<code>mode</code></h4><ul>
 <li><code>_IOFBF</code>：全缓冲</li>
 <li><code>_IOLBF</code>：行缓冲</li>
 <li><code>_IONBF</code>：不带缓冲</li>
 </ul>
-<h4 id="2-2-3-搭配不同参数时的效果"><a href="#2-2-3-搭配不同参数时的效果" class="headerlink" title="2.2.3 搭配不同参数时的效果"></a>2.2.3 搭配不同参数时的效果</h4><p><img src="/2023/10/25/apue-ch5/setbuf_setvbuf.png" srcset="/img/loading.gif" lazyload alt="setbuf和setvbuf函数"></p>
+<h4 id="2-2-3-搭配不同参数时的效果"><a href="#2-2-3-搭配不同参数时的效果" class="headerlink" title="2.2.3 搭配不同参数时的效果"></a>2.2.3 搭配不同参数时的效果</h4><p><img src="/2023/10/25/apue-ch05/setbuf_setvbuf.png" srcset="/img/loading.gif" lazyload alt="setbuf和setvbuf函数"></p>
 <h3 id="2-3-冲洗（flush）"><a href="#2-3-冲洗（flush）" class="headerlink" title="2.3 冲洗（flush）"></a>2.3 冲洗（flush）</h3><h4 id="2-3-1-含义"><a href="#2-3-1-含义" class="headerlink" title="2.3.1 含义"></a>2.3.1 含义</h4><ul>
 <li>标准I&#x2F;O库方面，flush将缓冲区内容写到磁盘上</li>
 <li>终端驱动程序方面，flush表示丢弃缓冲区中的数据</li>
@@ -380,7 +380,7 @@
 
 <h4 id="5-4-3-注意"><a href="#5-4-3-注意" class="headerlink" title="5.4.3 注意"></a>5.4.3 注意</h4><ul>
 <li>字符推回流后，读出字符的顺序与压送回的顺序相反</li>
-<li>不能回送EOF</li>
+<li>不能回送<code>EOF</code></li>
 <li>回送的字符不必是上一次读到的字符</li>
 <li>到达文件尾端仍可以回送字符<em>（因为成功的<code>ungetc</code>调用会清除流的文件结束标志）</em></li>
 </ul>

@@ -16,22 +16,22 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 4  文件和目录1. stat、fstat和lstat函数1.1 功能获取文件有关信息，其中lstat获取符号链接本身的信息，并不是链接所指向的文件的信息 1.2 函数原型123456#include &lt;sys&#x2F;stat.h&gt;&#x2F;&#x2F; 成功返回0，出错返回-1int stat(cons">
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 04  文件和目录1. stat、fstat和lstat函数1.1 功能获取文件有关信息，其中lstat获取符号链接本身的信息，并不是链接所指向的文件的信息 1.2 函数原型123456#include &lt;sys&#x2F;stat.h&gt;&#x2F;&#x2F; 成功返回0，出错返回-1int stat(con">
 <meta property="og:type" content="article">
-<meta property="og:title" content="APUE Chapter 4 - Files and Directories">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/10/08/apue-ch4/index.html">
+<meta property="og:title" content="APUE Chapter 04 - Files and Directories">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/10/08/apue-ch04/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 4  文件和目录1. stat、fstat和lstat函数1.1 功能获取文件有关信息，其中lstat获取符号链接本身的信息，并不是链接所指向的文件的信息 1.2 函数原型123456#include &lt;sys&#x2F;stat.h&gt;&#x2F;&#x2F; 成功返回0，出错返回-1int stat(cons">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 04  文件和目录1. stat、fstat和lstat函数1.1 功能获取文件有关信息，其中lstat获取符号链接本身的信息，并不是链接所指向的文件的信息 1.2 函数原型123456#include &lt;sys&#x2F;stat.h&gt;&#x2F;&#x2F; 成功返回0，出错返回-1int stat(con">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-10-08T15:40:06.000Z">
-<meta property="article:modified_time" content="2023-10-12T10:22:12.168Z">
+<meta property="article:modified_time" content="2023-11-01T10:34:52.688Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>APUE Chapter 4 - Files and Directories - zhgaocs</title>
+  <title>APUE Chapter 04 - Files and Directories - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -179,13 +179,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="APUE Chapter 4 - Files and Directories"></span>
+            <span id="subtitle" data-typed-text="APUE Chapter 04 - Files and Directories"></span>
           
         </div>
 
@@ -260,12 +260,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">APUE Chapter 4 - Files and Directories</h1>
+            <h1 id="seo-header">APUE Chapter 04 - Files and Directories</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-4-文件和目录"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-4-文件和目录" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 4  文件和目录"></a>Advanced Programming in the UNIX Environment—Chapter 4  文件和目录</h1><h2 id="1-stat、fstat和lstat函数"><a href="#1-stat、fstat和lstat函数" class="headerlink" title="1. stat、fstat和lstat函数"></a>1. <code>stat</code>、<code>fstat</code>和<code>lstat</code>函数</h2><h3 id="1-1-功能"><a href="#1-1-功能" class="headerlink" title="1.1 功能"></a>1.1 功能</h3><p>获取文件有关信息，其中<code>lstat</code>获取<strong>符号链接本身</strong>的信息，并不是链接所指向的文件的信息</p>
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-04-文件和目录"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-04-文件和目录" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 04  文件和目录"></a>Advanced Programming in the UNIX Environment—Chapter 04  文件和目录</h1><h2 id="1-stat、fstat和lstat函数"><a href="#1-stat、fstat和lstat函数" class="headerlink" title="1. stat、fstat和lstat函数"></a>1. <code>stat</code>、<code>fstat</code>和<code>lstat</code>函数</h2><h3 id="1-1-功能"><a href="#1-1-功能" class="headerlink" title="1.1 功能"></a>1.1 功能</h3><p>获取文件有关信息，其中<code>lstat</code>获取<strong>符号链接本身</strong>的信息，并不是链接所指向的文件的信息</p>
 <h3 id="1-2-函数原型"><a href="#1-2-函数原型" class="headerlink" title="1.2 函数原型"></a>1.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">stat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> pathname, <span class="hljs-keyword">struct</span> stat *<span class="hljs-keyword">restrict</span> buf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">fstat</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> stat *buf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">lstat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *<span class="hljs-keyword">restrict</span> pathname, <span class="hljs-keyword">struct</span> stat *<span class="hljs-keyword">restrict</span> buf)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="1-3-结构体stat"><a href="#1-3-结构体stat" class="headerlink" title="1.3 结构体stat"></a>1.3 结构体<code>stat</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">mode_t</span> st_mode;       <span class="hljs-comment">/* permissions */</span><br>    <span class="hljs-type">ino_t</span> st_ino;         <span class="hljs-comment">/* i-node number */</span><br>    <span class="hljs-type">dev_t</span> st_dev;         <span class="hljs-comment">/* device number */</span><br>    <span class="hljs-type">dev_t</span> st_rdev;        <span class="hljs-comment">/* device number for special files */</span><br>    <span class="hljs-type">nlink_t</span> st_nlink;     <span class="hljs-comment">/* number of links */</span><br>    <span class="hljs-type">uid_t</span> st_uid;         <span class="hljs-comment">/* user ID of owner */</span><br>    <span class="hljs-type">gid_t</span> st_gid;         <span class="hljs-comment">/* group ID of owner */</span><br>    <span class="hljs-type">off_t</span> st_size;        <span class="hljs-comment">/* size in bytes, for regular files */</span><br>    <span class="hljs-type">time_t</span> st_atime;      <span class="hljs-comment">/* access */</span><br>    <span class="hljs-type">time_t</span> st_mtime;      <span class="hljs-comment">/* modify */</span><br>    <span class="hljs-type">time_t</span> st_ctime;      <span class="hljs-comment">/* status change */</span><br>    <span class="hljs-type">blksize_t</span> st_blksize; <span class="hljs-comment">/* best I/O block size */</span><br>    <span class="hljs-type">blkcnt_t</span> st_blocks;   <span class="hljs-comment">/* number of disk blocks allocated */</span><br>&#125;;<br></code></pre></td></tr></table></figure>

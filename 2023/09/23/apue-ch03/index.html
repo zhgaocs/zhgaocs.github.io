@@ -16,25 +16,25 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 3 文件I&#x2F;O1. 文件描述符1.1 类型非负整数 1.2 功能文件描述符在内核中用于引用所有打开的文件 1.3 惯例   常量 值 含义    STDIN_FILENO 0 标准输入   STDOUT_FILENO 1 标准输出   STDERR_FILENO 2 标准错误输出">
+    <meta name="description" content="Advanced Programming in the UNIX Environment—Chapter 03 文件I&#x2F;O1. 文件描述符1.1 类型非负整数 1.2 功能文件描述符在内核中用于引用所有打开的文件 1.3 惯例   常量 值 含义    STDIN_FILENO 0 标准输入   STDOUT_FILENO 1 标准输出   STDERR_FILENO 2 标准错误输出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="APUE Chapter 3 - File I&#x2F;O">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/index.html">
+<meta property="og:title" content="APUE Chapter 03 - File I&#x2F;O">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/09/23/apue-ch03/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 3 文件I&#x2F;O1. 文件描述符1.1 类型非负整数 1.2 功能文件描述符在内核中用于引用所有打开的文件 1.3 惯例   常量 值 含义    STDIN_FILENO 0 标准输入   STDOUT_FILENO 1 标准输出   STDERR_FILENO 2 标准错误输出">
+<meta property="og:description" content="Advanced Programming in the UNIX Environment—Chapter 03 文件I&#x2F;O1. 文件描述符1.1 类型非负整数 1.2 功能文件描述符在内核中用于引用所有打开的文件 1.3 惯例   常量 值 含义    STDIN_FILENO 0 标准输入   STDOUT_FILENO 1 标准输出   STDERR_FILENO 2 标准错误输出">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/file_share.png">
-<meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/open_same_file.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch03/file_share.png">
+<meta property="og:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch03/open_same_file.png">
 <meta property="article:published_time" content="2023-09-23T08:41:03.000Z">
-<meta property="article:modified_time" content="2023-10-14T08:37:22.546Z">
+<meta property="article:modified_time" content="2023-11-01T10:34:08.374Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch3/file_share.png">
+<meta name="twitter:image" content="https://zhgaocs.github.io/2023/09/23/apue-ch03/file_share.png">
   
   
   
-  <title>APUE Chapter 3 - File I/O - zhgaocs</title>
+  <title>APUE Chapter 03 - File I/O - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,13 +182,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="APUE Chapter 3 - File I/O"></span>
+            <span id="subtitle" data-typed-text="APUE Chapter 03 - File I/O"></span>
           
         </div>
 
@@ -263,12 +263,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">APUE Chapter 3 - File I/O</h1>
+            <h1 id="seo-header">APUE Chapter 03 - File I/O</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-3-文件I-O"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-3-文件I-O" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 3 文件I&#x2F;O"></a>Advanced Programming in the UNIX Environment—Chapter 3 文件I&#x2F;O</h1><h2 id="1-文件描述符"><a href="#1-文件描述符" class="headerlink" title="1. 文件描述符"></a>1. 文件描述符</h2><h3 id="1-1-类型"><a href="#1-1-类型" class="headerlink" title="1.1 类型"></a>1.1 类型</h3><p>非负整数</p>
+                <h1 id="Advanced-Programming-in-the-UNIX-Environment—Chapter-03-文件I-O"><a href="#Advanced-Programming-in-the-UNIX-Environment—Chapter-03-文件I-O" class="headerlink" title="Advanced Programming in the UNIX Environment—Chapter 03 文件I&#x2F;O"></a>Advanced Programming in the UNIX Environment—Chapter 03 文件I&#x2F;O</h1><h2 id="1-文件描述符"><a href="#1-文件描述符" class="headerlink" title="1. 文件描述符"></a>1. 文件描述符</h2><h3 id="1-1-类型"><a href="#1-1-类型" class="headerlink" title="1.1 类型"></a>1.1 类型</h3><p>非负整数</p>
 <h3 id="1-2-功能"><a href="#1-2-功能" class="headerlink" title="1.2 功能"></a>1.2 功能</h3><p>文件描述符在内核中用于引用所有打开的文件</p>
 <h3 id="1-3-惯例"><a href="#1-3-惯例" class="headerlink" title="1.3 惯例"></a>1.3 惯例</h3><table>
 <thead>
@@ -382,9 +382,9 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2023/09/23/apue-ch3/file_share.png" srcset="/img/loading.gif" lazyload alt="文件共享"></p>
+<p><img src="/2023/09/23/apue-ch03/file_share.png" srcset="/img/loading.gif" lazyload alt="文件共享"></p>
 <h3 id="8-2-两独立进程打开同一文件"><a href="#8-2-两独立进程打开同一文件" class="headerlink" title="8.2 两独立进程打开同一文件"></a>8.2 两独立进程打开同一文件</h3><p>两进程获得<strong>不同的文件描述符</strong>，但指向相同的v节点表项，因为这样能确保每个进程都有自己的对该文件的当前偏移量</p>
-<p><img src="/2023/09/23/apue-ch3/open_same_file.png" srcset="/img/loading.gif" lazyload alt="两独立进程打开同一文件"></p>
+<p><img src="/2023/09/23/apue-ch03/open_same_file.png" srcset="/img/loading.gif" lazyload alt="两独立进程打开同一文件"></p>
 <h2 id="9-原子操作"><a href="#9-原子操作" class="headerlink" title="9. 原子操作"></a>9. 原子操作</h2><h3 id="9-1-函数原型"><a href="#9-1-函数原型" class="headerlink" title="9.1 函数原型"></a>9.1 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回读到的字节数，读到文件结尾返回0；出错返回-1</span><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">pread</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> nbytes, <span class="hljs-type">off_t</span> offset)</span>;<br><span class="hljs-comment">// 成功返回已写的字节数，出错返回-1</span><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">pwrite</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> nbytes, <span class="hljs-type">off_t</span> offset)</span>;<br></code></pre></td></tr></table></figure>
 
 <h3 id="9-2-特点"><a href="#9-2-特点" class="headerlink" title="9.2 特点"></a>9.2 特点</h3><p><code>pread</code>相当于顺序调用<code>lseek</code>和<code>read</code>，但是<code>pread</code>不可被中断，且<strong>不更新文件指针</strong></p>
