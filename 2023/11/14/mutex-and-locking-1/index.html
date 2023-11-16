@@ -16,22 +16,22 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C++线程间共享数据1. std::mutex类1.1 作用std::mutex类用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
+    <meta name="description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Sharing data between threads in C++">
-<meta property="og:url" content="https://zhgaocs.github.io/2023/11/14/thread-sharing-data/index.html">
+<meta property="og:title" content="C++ Mutex and Locking (Part 1)">
+<meta property="og:url" content="https://zhgaocs.github.io/2023/11/14/mutex-and-locking-1/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="C++线程间共享数据1. std::mutex类1.1 作用std::mutex类用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
+<meta property="og:description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-14T15:43:34.000Z">
-<meta property="article:modified_time" content="2023-11-14T15:51:35.849Z">
+<meta property="article:modified_time" content="2023-11-16T14:27:16.509Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Sharing data between threads in C++ - zhgaocs</title>
+  <title>C++ Mutex and Locking (Part 1) - zhgaocs</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -185,7 +185,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Sharing data between threads in C++"></span>
+            <span id="subtitle" data-typed-text="C++ Mutex and Locking (Part 1)"></span>
           
         </div>
 
@@ -208,7 +208,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k words
+          4.2k words
         
       </span>
     
@@ -260,12 +260,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Sharing data between threads in C++</h1>
+            <h1 id="seo-header">C++ Mutex and Locking (Part 1)</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="C-线程间共享数据"><a href="#C-线程间共享数据" class="headerlink" title="C++线程间共享数据"></a>C++线程间共享数据</h1><h2 id="1-std-mutex类"><a href="#1-std-mutex类" class="headerlink" title="1. std::mutex类"></a>1. <code>std::mutex</code>类</h2><h3 id="1-1-作用"><a href="#1-1-作用" class="headerlink" title="1.1 作用"></a>1.1 作用</h3><p><code>std::mutex</code>类用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件<code>&lt;mutex&gt;</code>中</p>
+                <h1 id="C-互斥和锁定（一）"><a href="#C-互斥和锁定（一）" class="headerlink" title="C++互斥和锁定（一）"></a>C++互斥和锁定（一）</h1><h2 id="1-std-mutex类"><a href="#1-std-mutex类" class="headerlink" title="1. std::mutex类"></a>1. <code>std::mutex</code>类</h2><h3 id="1-1-作用"><a href="#1-1-作用" class="headerlink" title="1.1 作用"></a>1.1 作用</h3><p><code>std::mutex</code>用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件<code>&lt;mutex&gt;</code>中</p>
 <h3 id="1-2-构造函数和析构函数"><a href="#1-2-构造函数和析构函数" class="headerlink" title="1.2 构造函数和析构函数"></a>1.2 构造函数和析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">mutex</span>();<br>~<span class="hljs-built_in">mutex</span>();<br></code></pre></td></tr></table></figure>
 
 <h3 id="1-3-锁定"><a href="#1-3-锁定" class="headerlink" title="1.3 锁定"></a>1.3 锁定</h3><ul>
@@ -274,7 +274,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li><code>try_lock</code>：尝试锁定互斥，立即返回。成功获得锁时返回true，否则返回false</li>
+<li><code>try_lock</code>：尝试锁定互斥，立即返回。成功获得锁时返回<code>true</code>，否则返回<code>false</code></li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">try_lock</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
@@ -294,9 +294,71 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">mutex</span>(<span class="hljs-type">const</span> mutex &amp;) = <span class="hljs-keyword">delete</span>;<br>mutex &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> mutex &amp;) = <span class="hljs-keyword">delete</span>;<br></code></pre></td></tr></table></figure>
 
-<h2 id="2-std-unique-lock类"><a href="#2-std-unique-lock类" class="headerlink" title="2. std::unique_lock类"></a>2. <code>std::unique_lock</code>类</h2><h3 id="2-1-作用"><a href="#2-1-作用" class="headerlink" title="2.1 作用"></a>2.1 作用</h3><h3 id="2-2-类模板声明"><a href="#2-2-类模板声明" class="headerlink" title="2.2 类模板声明"></a>2.2 类模板声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">unique_lock</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="2-互斥包装器概览"><a href="#2-互斥包装器概览" class="headerlink" title="2. 互斥包装器概览"></a>2. 互斥包装器概览</h2><h3 id="2-1-锁定策略"><a href="#2-1-锁定策略" class="headerlink" title="2.1 锁定策略"></a>2.1 锁定策略</h3><h4 id="2-1-1-锁定策略的标记类型"><a href="#2-1-1-锁定策略的标记类型" class="headerlink" title="2.1.1 锁定策略的标记类型"></a>2.1.1 锁定策略的标记类型</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">defer_lock_t</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">defer_lock_t</span><span class="hljs-params">()</span> </span>= <span class="hljs-keyword">default</span>;<br>&#125;;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">try_to_lock_t</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">try_to_lock_t</span><span class="hljs-params">()</span> </span>= <span class="hljs-keyword">default</span>;<br>&#125;;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">adopt_lock_t</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">adopt_lock_t</span><span class="hljs-params">()</span> </span>= <span class="hljs-keyword">default</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-3-模板形参"><a href="#2-3-模板形参" class="headerlink" title="2.3 模板形参"></a>2.3 模板形参</h3><p>形参<code>Mutex</code>—要锁定的互斥类型。类型必须满足基础可锁</p>
+<h4 id="2-1-2-标记类型的含义"><a href="#2-1-2-标记类型的含义" class="headerlink" title="2.1.2 标记类型的含义"></a>2.1.2 标记类型的含义</h4><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>defer_lock_t</code></td>
+<td align="center">不获得互斥的所有权</td>
+</tr>
+<tr>
+<td align="center"><code>try_to_lock_t</code></td>
+<td align="center">尝试获得互斥的所有权而不阻塞</td>
+</tr>
+<tr>
+<td align="center"><code>adopt_lock_t</code></td>
+<td align="center">假设调用方线程已拥有互斥的所有权</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-锁定概念的比较"><a href="#2-2-锁定概念的比较" class="headerlink" title="2.2 锁定概念的比较"></a>2.2 锁定概念的比较</h3><table>
+<thead>
+<tr>
+<th align="center">概念</th>
+<th align="center">成员函数要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">基本可锁定</td>
+<td align="center"><code>lock</code>、<code>unlock</code></td>
+</tr>
+<tr>
+<td align="center">可锁定</td>
+<td align="center"><code>lock</code>、<code>unlock</code>、<code>try_lock</code></td>
+</tr>
+<tr>
+<td align="center">可定时锁定</td>
+<td align="center"><code>lock</code>、<code>unlock</code>、<code>try_lock</code>、<code>try_lock_for</code>、<code>try_lock_until</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-3-互斥包装器类模板声明"><a href="#2-3-互斥包装器类模板声明" class="headerlink" title="2.3 互斥包装器类模板声明"></a>2.3 互斥包装器类模板声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">unique_lock</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">lock_guard</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>... MutexTypes&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">scoped_lock</span>;<br></code></pre></td></tr></table></figure>
+
+<p>类模板参数要求</p>
+<table>
+<thead>
+<tr>
+<th align="center">包装器</th>
+<th align="center">模板形参（锁）的要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>std::unique_lock</code></td>
+<td align="center">基本可锁定</td>
+</tr>
+<tr>
+<td align="center"><code>std::lock_guard</code></td>
+<td align="center">基本可锁定</td>
+</tr>
+<tr>
+<td align="center"><code>std::scoped_lock</code></td>
+<td align="center">可锁定（模板参数个数为1时只需满足基本可锁定）</td>
+</tr>
+</tbody></table>
 <h3 id="2-4-成员类型"><a href="#2-4-成员类型" class="headerlink" title="2.4 成员类型"></a>2.4 成员类型</h3><table>
 <thead>
 <tr>
@@ -305,19 +367,79 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="center"><code>mutex_type</code></td>
+<td align="center"><code>mutex_type</code>（仅当<code>std::scoped_lock</code>的<code>sizeof...(MutexTypes) == 1</code>时有效）</td>
 <td align="center"><code>Mutex</code></td>
 </tr>
 </tbody></table>
-<h3 id="2-5-构造函数"><a href="#2-5-构造函数" class="headerlink" title="2.5 构造函数"></a>2.5 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">unique_lock</span>() <span class="hljs-keyword">noexcept</span>;<br><span class="hljs-built_in">unique_lock</span>(unique_lock &amp;&amp;other) <span class="hljs-keyword">noexcept</span>;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">unique_lock</span><span class="hljs-params">(mutex_type &amp;m)</span></span>;<br></code></pre></td></tr></table></figure>
+<h3 id="2-5-互斥包装器对比分析"><a href="#2-5-互斥包装器对比分析" class="headerlink" title="2.5 互斥包装器对比分析"></a>2.5 互斥包装器对比分析</h3><table>
+<thead>
+<tr>
+<th align="center">特性</th>
+<th align="center"><code>std::unique_lock</code></th>
+<th align="center"><code>std::lock_guard</code></th>
+<th align="center"><code>std::scoped_lock</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">标准</td>
+<td align="center">C++11</td>
+<td align="center">C++11</td>
+<td align="center">C++17</td>
+</tr>
+<tr>
+<td align="center">锁定策略</td>
+<td align="center">立即锁定、延迟锁定、尝试锁定和采用锁定</td>
+<td align="center">只支持立即锁定</td>
+<td align="center">只支持立即锁定</td>
+</tr>
+<tr>
+<td align="center">是否支持手动锁定和解锁</td>
+<td align="center">支持</td>
+<td align="center">不支持</td>
+<td align="center">不支持</td>
+</tr>
+<tr>
+<td align="center">是否能与条件变量配合使用</td>
+<td align="center">能</td>
+<td align="center">不能</td>
+<td align="center">不能</td>
+</tr>
+<tr>
+<td align="center">是否支持锁定多个互斥量</td>
+<td align="center">不支持</td>
+<td align="center">不支持</td>
+<td align="center">支持</td>
+</tr>
+<tr>
+<td align="center">包装器对象是否可拷贝</td>
+<td align="center">不可拷贝</td>
+<td align="center">不可拷贝</td>
+<td align="center">不可拷贝</td>
+</tr>
+<tr>
+<td align="center">包装器对象是否可移动</td>
+<td align="center">可移动</td>
+<td align="center">&#x2F;</td>
+<td align="center">&#x2F;</td>
+</tr>
+<tr>
+<td align="center">效率和内存占用</td>
+<td align="center">效率较低，内存占用稍高</td>
+<td align="center">效率较高，内存占用较低</td>
+<td align="center">效率较高，内存占用较低</td>
+</tr>
+</tbody></table>
+<h2 id="3-std-unique-lock类"><a href="#3-std-unique-lock类" class="headerlink" title="3. std::unique_lock类"></a>3. <code>std::unique_lock</code>类</h2><h3 id="3-1-构造函数"><a href="#3-1-构造函数" class="headerlink" title="3.1 构造函数"></a>3.1 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">unique_lock</span>() <span class="hljs-keyword">noexcept</span>; <span class="hljs-comment">// 构造无关联互斥的unique_lock</span><br><span class="hljs-built_in">unique_lock</span>(unique_lock &amp;&amp;other) <span class="hljs-keyword">noexcept</span>;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">unique_lock</span><span class="hljs-params">(mutex_type &amp;m)</span></span>;<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">unique_lock</span>(mutex_type &amp;m, std::<span class="hljs-type">defer_lock_t</span> t) <span class="hljs-keyword">noexcept</span>;<br><span class="hljs-built_in">unique_lock</span>(mutex_type &amp;m, std::<span class="hljs-type">try_to_lock_t</span> t);<br><span class="hljs-built_in">unique_lock</span>(mutex_type &amp;m, std::<span class="hljs-type">adopt_lock_t</span> t);<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rep</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Period</span>&gt;<br><span class="hljs-built_in">unique_lock</span>(mutex_type &amp;m, <span class="hljs-type">const</span> std::chrono::duration&lt;Rep, Period&gt; &amp;timeout_duration);<br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Clock</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Duration</span>&gt;<br><span class="hljs-built_in">unique_lock</span>(mutex_type &amp;m, <span class="hljs-type">const</span> std::chrono::time_point&lt;Clock, Duration&gt; &amp;timeout_time);<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-6-析构函数和赋值运算符"><a href="#2-6-析构函数和赋值运算符" class="headerlink" title="2.6 析构函数和赋值运算符"></a>2.6 析构函数和赋值运算符</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">unique_lock</span>();<br>unique_lock &amp;<span class="hljs-keyword">operator</span>=(unique_lock &amp;&amp;other);<br></code></pre></td></tr></table></figure>
+<h3 id="3-2-析构函数"><a href="#3-2-析构函数" class="headerlink" title="3.2 析构函数"></a>3.2 析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">unique_lock</span>(); <span class="hljs-comment">// 销毁锁。若*this拥有关联互斥且获得了其所有权，则解锁互斥</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="2-7-锁定"><a href="#2-7-锁定" class="headerlink" title="2.7 锁定"></a>2.7 锁定</h3><ul>
+<h3 id="3-3-移动赋值运算符"><a href="#3-3-移动赋值运算符" class="headerlink" title="3.3 移动赋值运算符"></a>3.3 移动赋值运算符</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 用移动语义以other的内容替换*this内容。</span><br><span class="hljs-comment"> * 若调用前*this拥有关联互斥并获得其所有权，则解锁互斥</span><br><span class="hljs-comment"> */</span><br>unique_lock &amp;<span class="hljs-keyword">operator</span>=(unique_lock &amp;&amp;other);<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-4-锁定"><a href="#3-4-锁定" class="headerlink" title="3.4 锁定"></a>3.4 锁定</h3><ul>
 <li><code>lock</code>：锁定关联互斥。等效调用<code>mutex()-&gt;lock()</code></li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
@@ -328,21 +450,25 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">try_lock</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li><code>try_lock_for</code>：试图锁定关联的定时可锁互斥，若互斥在给定时长中不可用则返回</li>
+<li><code>try_lock_for</code>：在指定的时间段内尝试获取互斥</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">try_lock_for</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::timed_mutex tmtx;<br><span class="hljs-function">std::unique_lock&lt;std::timed_mutex&gt; <span class="hljs-title">lck</span><span class="hljs-params">(tmtx, std::defer_lock)</span></span>;<br><br>lck.<span class="hljs-built_in">try_lock_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">500</span>));<br></code></pre></td></tr></table></figure>
+
 <ul>
-<li><code>try_lock_until</code>：尝试锁定关联可定时锁互斥，若抵达指定时间点互斥仍不可用则返回</li>
+<li><code>try_lock_until</code>：在指定的时间点之前尝试获取互斥</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Clock</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Duration</span>&gt;<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">try_lock_until</span><span class="hljs-params">(<span class="hljs-type">const</span> std::chrono::time_point&lt;Clock, Duration&gt; &amp;timeout_time)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::timed_mutex tmtx;<br><span class="hljs-function">std::unique_lock&lt;std::timed_mutex&gt; <span class="hljs-title">lck</span><span class="hljs-params">(tmtx, std::defer_lock)</span></span>;<br><br><span class="hljs-keyword">auto</span> now = std::chrono::steady_clock::<span class="hljs-built_in">now</span>();<br>lck.<span class="hljs-built_in">try_lock_until</span>(now + std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">1</span>));<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><code>unlock</code>：解锁关联互斥并释放所有权</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-8-修改器"><a href="#2-8-修改器" class="headerlink" title="2.8 修改器"></a>2.8 修改器</h3><ul>
+<h3 id="3-5-修改器"><a href="#3-5-修改器" class="headerlink" title="3.5 修改器"></a>3.5 修改器</h3><ul>
 <li><code>swap</code>：与另一<code>std::unique_lock</code> 交换状态</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(unique_lock &amp;other)</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
@@ -352,7 +478,7 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">mutex_type *<span class="hljs-title">release</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-9-观察器"><a href="#2-9-观察器" class="headerlink" title="2.9 观察器"></a>2.9 观察器</h3><ul>
+<h3 id="3-6-观察器"><a href="#3-6-观察器" class="headerlink" title="3.6 观察器"></a>3.6 观察器</h3><ul>
 <li><code>mutex</code>：返回指向关联互斥的指针，或若无关联互斥则返回空指针</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">mutex_type *<span class="hljs-title">mutex</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
@@ -367,58 +493,35 @@
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></table></figure>
 
-<h2 id="3-std-lock-guard类"><a href="#3-std-lock-guard类" class="headerlink" title="3. std::lock_guard类"></a>3. <code>std::lock_guard</code>类</h2><h3 id="3-1-作用"><a href="#3-1-作用" class="headerlink" title="3.1 作用"></a>3.1 作用</h3><p><code>std::lock_guard</code>是一种RAII互斥量封装类，能自动管理互斥量的锁定和解锁，定义在头文件<code>&lt;mutex&gt;</code>中</p>
-<h3 id="3-2-类模板声明"><a href="#3-2-类模板声明" class="headerlink" title="3.2 类模板声明"></a>3.2 类模板声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Mutex</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">lock_guard</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::mutex mtx;<br><span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lck</span><span class="hljs-params">(mtx, std::defer_lock)</span></span>;<br><br><span class="hljs-keyword">if</span> (lck)<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Mutex is locked.&quot;</span> &lt;&lt; std::endl;<br><span class="hljs-keyword">else</span><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Mutex is not locked.&quot;</span> &lt;&lt; std::endl;<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-3-模板形参"><a href="#3-3-模板形参" class="headerlink" title="3.3 模板形参"></a>3.3 模板形参</h3><p>形参<code>Mutex</code>：要锁定的互斥</p>
-<h3 id="3-4-成员类型"><a href="#3-4-成员类型" class="headerlink" title="3.4 成员类型"></a>3.4 成员类型</h3><p>同<code>std::unique_lock</code></p>
-<h3 id="3-5-构造函数"><a href="#3-5-构造函数" class="headerlink" title="3.5 构造函数"></a>3.5 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">lock_guard</span><span class="hljs-params">(mutex_type &amp;m)</span></span>;<br></code></pre></td></tr></table></figure>
+<h2 id="4-std-lock-guard类"><a href="#4-std-lock-guard类" class="headerlink" title="4. std::lock_guard类"></a>4. <code>std::lock_guard</code>类</h2><h3 id="4-1-构造函数"><a href="#4-1-构造函数" class="headerlink" title="4.1 构造函数"></a>4.1 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">lock_guard</span><span class="hljs-params">(mutex_type &amp;m)</span></span>;             <span class="hljs-comment">// 等效调用m.lock()</span><br><span class="hljs-built_in">lock_guard</span>(mutex_type &amp;m, std::<span class="hljs-type">adopt_lock_t</span> t); <span class="hljs-comment">// 假定当前线程已拥有互斥m的所有权</span><br></code></pre></td></tr></table></figure>
 
-<p>等效调用<code>m.lock()</code></p>
-<hr>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">lock_guard</span>(mutex_type &amp;m, std::<span class="hljs-type">adopt_lock_t</span> t);<br></code></pre></td></tr></table></figure>
+<h3 id="4-2-析构函数"><a href="#4-2-析构函数" class="headerlink" title="4.2 析构函数"></a>4.2 析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">lock_guard</span>(); <span class="hljs-comment">// 释放所占有的互斥，等效调用m.unlock()，其中m是传递给lock_guard的构造函数的互斥</span><br></code></pre></td></tr></table></figure>
 
-<p>假定当前线程已拥有互斥<code>m</code>的所有权</p>
-<p>参数<code>t</code>： 用于选择构造函数非锁定版本的标签参数</p>
-<h3 id="3-6-析构函数"><a href="#3-6-析构函数" class="headerlink" title="3.6 析构函数"></a>3.6 析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">lock_guard</span>();<br></code></pre></td></tr></table></figure>
+<h2 id="5-std-scoped-lock类"><a href="#5-std-scoped-lock类" class="headerlink" title="5. std::scoped_lock类"></a>5. <code>std::scoped_lock</code>类</h2><h3 id="5-1-构造函数"><a href="#5-1-构造函数" class="headerlink" title="5.1 构造函数"></a>5.1 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">scoped_lock</span><span class="hljs-params">(MutexTypes &amp;...m)</span></span>;<br><span class="hljs-built_in">scoped_lock</span>(std::<span class="hljs-type">adopt_lock_t</span>, MutexTypes &amp;...m); <span class="hljs-comment">// 假定当前线程已拥有所有传入的互斥的所有权</span><br></code></pre></td></tr></table></figure>
 
-<p>释放所占有的互斥，等效调用<code>m.unlock()</code>，其中 <code>m</code> 是传递给<code>lock_guard</code>的构造函数的互斥</p>
-<h3 id="3-7-注意"><a href="#3-7-注意" class="headerlink" title="3.7 注意"></a>3.7 注意</h3><p><code>std::lock_guard</code><strong>不可拷贝</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">lock_guard</span>(<span class="hljs-type">const</span> lock_guard &amp;) = <span class="hljs-keyword">delete</span>;<br>lock_guard &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> lock_guard &amp;) = <span class="hljs-keyword">delete</span>;<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-std-scoped-lock类（C-17起）"><a href="#4-std-scoped-lock类（C-17起）" class="headerlink" title="4. std::scoped_lock类（C++17起）"></a>4. <code>std::scoped_lock</code>类（C++17起）</h2><h3 id="4-1-作用"><a href="#4-1-作用" class="headerlink" title="4.1 作用"></a>4.1 作用</h3><p><code>std::scoped_lock</code>是一种RAII互斥量封装类，能同时持有并自动管理<strong>一个或多个</strong>互斥量的生命周期，定义在头文件<code>&lt;mutex&gt;</code>中</p>
-<h3 id="4-2-类模板声明"><a href="#4-2-类模板声明" class="headerlink" title="4.2 类模板声明"></a>4.2 类模板声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>... MutexTypes&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">scoped_lock</span>;<br></code></pre></td></tr></table></figure>
-
-<h3 id="4-3-模板形参"><a href="#4-3-模板形参" class="headerlink" title="4.3 模板形参"></a>4.3 模板形参</h3><p>形参<code>MutexTypes</code>代表需要锁定的互斥类型，这些类型必须满足<strong>可锁定</strong>的要求。如果<code>sizeof...(MutexTypes) == 1</code>，那么这个唯一的类型必须满足<strong>基础可锁定</strong>的要求</p>
-<h3 id="4-4-成员类型"><a href="#4-4-成员类型" class="headerlink" title="4.4 成员类型"></a>4.4 成员类型</h3><table>
+<table>
 <thead>
 <tr>
-<th align="center">成员类型</th>
-<th align="center">定义</th>
+<th align="center"><code>sizeof...(MutexTypes)</code>的值</th>
+<th align="center">行为</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="center"><code>mutex_type</code>（若 <code>sizeof...(MutexTypes)==1</code>）</td>
-<td align="center"><code>MutexTypes...</code> 中唯一的类型</td>
+<td align="center">0</td>
+<td align="center">不做任何事</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">等效调用<code>m.lock()</code></td>
+</tr>
+<tr>
+<td align="center">其它</td>
+<td align="center">等效调用<code>std::lock(m..)</code></td>
 </tr>
 </tbody></table>
-<h3 id="4-5-构造函数"><a href="#4-5-构造函数" class="headerlink" title="4.5 构造函数"></a>4.5 构造函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">scoped_lock</span><span class="hljs-params">(MutexTypes &amp;...m)</span></span>;<br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><code>sizeof...(MutexTypes) == 0</code>不做任何事</li>
-<li><code>sizeof...(MutexTypes) == 1</code>，等效调用<code>m.lock()</code></li>
-<li>否则，等效调用<code>std::lock(m..)</code></li>
-</ul>
-<hr>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">scoped_lock</span>(std::<span class="hljs-type">adopt_lock_t</span>, MutexTypes &amp;...m);<br></code></pre></td></tr></table></figure>
-
-<p>假定当前线程已拥有所有传入的互斥的所有权</p>
-<p>参数<code>t</code>： 用于选择构造函数非锁定版本的标签参数</p>
-<h3 id="4-6-析构函数"><a href="#4-6-析构函数" class="headerlink" title="4.6 析构函数"></a>4.6 析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">scoped_lock</span>();<br></code></pre></td></tr></table></figure>
-
-<p>在析构函数中，释放所有占有的互斥，相当于对传递给 <code>scoped_lock</code>构造函数的每个互斥包中的互斥调用 <code>unlock()</code> 方法</p>
-<h3 id="4-7-注意"><a href="#4-7-注意" class="headerlink" title="4.7 注意"></a>4.7 注意</h3><p><code>std::scoped_lock</code> <strong>不可拷贝</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">scoped_lock</span>(<span class="hljs-type">const</span> scoped_lock &amp;) = <span class="hljs-keyword">delete</span>;<br>scoped_lock &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> scoped_lock &amp;) = <span class="hljs-keyword">delete</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="5-2-析构函数"><a href="#5-2-析构函数" class="headerlink" title="5.2 析构函数"></a>5.2 析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">~<span class="hljs-built_in">scoped_lock</span>(); <span class="hljs-comment">// 释放所有占有的互斥，相当于对传递给scoped_lock构造函数的每个互斥包中的互斥调用unlock()</span><br></code></pre></td></tr></table></figure>
 
 
                 
