@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Keyword in C++ - alignof</title>
+    <link href="/2023/11/22/keyword-alignof/"/>
+    <url>/2023/11/22/keyword-alignof/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C-关键字—alignof"><a href="#C-关键字—alignof" class="headerlink" title="C++关键字—alignof"></a>C++关键字—<code>alignof</code></h1><h2 id="1-标准"><a href="#1-标准" class="headerlink" title="1. 标准"></a>1. 标准</h2><p>C++11</p><h2 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h2><p>查询类型的对齐要求</p><h2 id="3-语法"><a href="#3-语法" class="headerlink" title="3. 语法"></a>3. 语法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">alignof</span>(type-id);<br></code></pre></td></tr></table></figure><p>返回值类型为<code>std::size_t</code></p><h2 id="4-对齐要求"><a href="#4-对齐要求" class="headerlink" title="4. 对齐要求"></a>4. 对齐要求</h2><ul><li><strong>基础类型</strong>：对齐要求等于类型的存储大小</li><li><strong>类类型</strong>：对齐要求是其成员变量中最大的对齐要求</li></ul><h2 id="5-注意"><a href="#5-注意" class="headerlink" title="5. 注意"></a>5. 注意</h2><ul><li><code>type-id</code>为引用类型，<code>alignof</code>返回的是<strong>被引用</strong>类型的对齐要求</li><li><code>type-id</code>为数组类型，<code>alignof</code>返回的是<strong>数组元素</strong>类型的对齐要求</li></ul><h2 id="6-示例"><a href="#6-示例" class="headerlink" title="6. 示例"></a>6. 示例</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">S</span><br>&#123;<br>    <span class="hljs-type">bool</span> b;<br>    <span class="hljs-type">char</span> c;<br>    <span class="hljs-type">double</span> d;<br>    <span class="hljs-type">float</span> f;<br>    <span class="hljs-type">int</span> i;<br>&#125;;<br><br><span class="hljs-type">int</span> i, &amp;ri = i;<br>S arr[<span class="hljs-number">2</span>];<br><br><span class="hljs-built_in">alignof</span>(ri);  <span class="hljs-comment">// 4</span><br><span class="hljs-built_in">alignof</span>(S);   <span class="hljs-comment">// 8</span><br><span class="hljs-built_in">alignof</span>(arr); <span class="hljs-comment">// 8</span><br><span class="hljs-built_in">sizeof</span>(S);    <span class="hljs-comment">// 24</span><br><span class="hljs-built_in">sizeof</span>(arr);  <span class="hljs-comment">// 48</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Language</category>
+      
+      <category>Keyword</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C++ Mutex and Locking (Part 1)</title>
     <link href="/2023/11/14/mutex-and-locking-1/"/>
     <url>/2023/11/14/mutex-and-locking-1/</url>
