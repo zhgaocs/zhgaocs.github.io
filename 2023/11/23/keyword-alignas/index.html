@@ -24,7 +24,7 @@
 <meta property="og:description" content="C++关键字—alignas1. 标准C++11 2. 作用指定类型或对象的对齐要求 3. 语法123alignas(expression); &#x2F;&#x2F; 表达式必须是一个整型常量表达式，其值为零或者是合法的对齐或扩展对齐alignas(type-id);    &#x2F;&#x2F; 等价于alignas(alignof(类型标识))，即将对齐方式设置为指定类型的对齐要求alignas(pack...);    &#x2F;&#x2F;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-23T09:08:43.000Z">
-<meta property="article:modified_time" content="2023-11-23T09:11:21.388Z">
+<meta property="article:modified_time" content="2023-11-24T14:38:47.145Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary_large_image">
@@ -208,7 +208,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          767 words
+          768 words
         
       </span>
     
@@ -269,7 +269,7 @@
 <h2 id="2-作用"><a href="#2-作用" class="headerlink" title="2. 作用"></a>2. 作用</h2><p>指定类型或对象的对齐要求</p>
 <h2 id="3-语法"><a href="#3-语法" class="headerlink" title="3. 语法"></a>3. 语法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">alignas</span>(expression); <span class="hljs-comment">// 表达式必须是一个整型常量表达式，其值为零或者是合法的对齐或扩展对齐</span><br><span class="hljs-built_in">alignas</span>(type-id);    <span class="hljs-comment">// 等价于alignas(alignof(类型标识))，即将对齐方式设置为指定类型的对齐要求</span><br><span class="hljs-built_in">alignas</span>(pack...);    <span class="hljs-comment">// 等价于为模板参数包中每个模板参数使用alignas</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="4-alignas用法"><a href="#4-alignas用法" class="headerlink" title="4. alignas用法"></a>4. <code>alignas</code>用法</h2><h3 id="4-1-类的声明或定义"><a href="#4-1-类的声明或定义" class="headerlink" title="4.1 类的声明或定义"></a>4.1 类的声明或定义</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">alignas</span>(<span class="hljs-number">8</span>) <span class="hljs-keyword">struct</span> <span class="hljs-title class_">S</span>; <span class="hljs-comment">// 用于类的声明</span><br><span class="hljs-built_in">alignas</span>(<span class="hljs-number">8</span>) <span class="hljs-keyword">struct</span> <span class="hljs-title class_">X</span><br>&#123;<br>    S s<br>&#125;; <span class="hljs-comment">// 用于类的定义</span><br></code></pre></td></tr></table></figure>
+<h2 id="4-alignas用法"><a href="#4-alignas用法" class="headerlink" title="4. alignas用法"></a>4. <code>alignas</code>用法</h2><h3 id="4-1-类的声明或定义"><a href="#4-1-类的声明或定义" class="headerlink" title="4.1 类的声明或定义"></a>4.1 类的声明或定义</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">alignas</span>(<span class="hljs-number">8</span>) <span class="hljs-keyword">struct</span> <span class="hljs-title class_">S</span>; <span class="hljs-comment">// 用于类的声明</span><br><span class="hljs-built_in">alignas</span>(<span class="hljs-number">8</span>) <span class="hljs-keyword">struct</span> <span class="hljs-title class_">X</span><br>&#123;<br>    S s;<br>&#125;; <span class="hljs-comment">// 用于类的定义</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="4-2-非位域类数据成员的声明"><a href="#4-2-非位域类数据成员的声明" class="headerlink" title="4.2 非位域类数据成员的声明"></a>4.2 非位域类数据成员的声明</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">S</span><br>&#123;<br>    <span class="hljs-built_in">alignas</span>(<span class="hljs-number">16</span>) <span class="hljs-type">int</span> x;<br>    <span class="hljs-type">double</span> y;<br>&#125;; <span class="hljs-comment">// alignof(S) == 16</span><br></code></pre></td></tr></table></figure>
 
