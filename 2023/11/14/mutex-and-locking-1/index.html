@@ -16,15 +16,15 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
+    <meta name="description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中（C++11起） 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ Mutex and Locking (Part 1)">
 <meta property="og:url" content="https://zhgaocs.github.io/2023/11/14/mutex-and-locking-1/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lock：尝试锁定互">
+<meta property="og:description" content="C++互斥和锁定（一）1. std::mutex类1.1 作用std::mutex用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件&lt;mutex&gt;中（C++11起） 1.2 构造函数和析构函数12mutex();~mutex();  1.3 锁定 lock：锁定互斥。若另一线程已锁定互斥，则到lock的调用将阻塞执行，直至获得锁  1void lock();   try_lo">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-14T15:43:34.000Z">
-<meta property="article:modified_time" content="2023-11-21T11:03:45.067Z">
+<meta property="article:modified_time" content="2023-11-25T06:54:03.748Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="cpp">
 <meta name="twitter:card" content="summary_large_image">
@@ -265,7 +265,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="C-互斥和锁定（一）"><a href="#C-互斥和锁定（一）" class="headerlink" title="C++互斥和锁定（一）"></a>C++互斥和锁定（一）</h1><h2 id="1-std-mutex类"><a href="#1-std-mutex类" class="headerlink" title="1. std::mutex类"></a>1. <code>std::mutex</code>类</h2><h3 id="1-1-作用"><a href="#1-1-作用" class="headerlink" title="1.1 作用"></a>1.1 作用</h3><p><code>std::mutex</code>用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件<code>&lt;mutex&gt;</code>中</p>
+                <h1 id="C-互斥和锁定（一）"><a href="#C-互斥和锁定（一）" class="headerlink" title="C++互斥和锁定（一）"></a>C++互斥和锁定（一）</h1><h2 id="1-std-mutex类"><a href="#1-std-mutex类" class="headerlink" title="1. std::mutex类"></a>1. <code>std::mutex</code>类</h2><h3 id="1-1-作用"><a href="#1-1-作用" class="headerlink" title="1.1 作用"></a>1.1 作用</h3><p><code>std::mutex</code>用于保护共享数据免受多个线程同时访问的同步原语，定义在头文件<code>&lt;mutex&gt;</code>中<em>（C++11起）</em></p>
 <h3 id="1-2-构造函数和析构函数"><a href="#1-2-构造函数和析构函数" class="headerlink" title="1.2 构造函数和析构函数"></a>1.2 构造函数和析构函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">mutex</span>();<br>~<span class="hljs-built_in">mutex</span>();<br></code></pre></td></tr></table></figure>
 
 <h3 id="1-3-锁定"><a href="#1-3-锁定" class="headerlink" title="1.3 锁定"></a>1.3 锁定</h3><ul>
