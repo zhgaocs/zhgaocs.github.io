@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/github.png">
+  <link rel="icon" href="/img/github.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhgaocs">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="UNIX Network Programming—Chapter 26 Threads1. 概述1.1 fork的问题 fork成本高，需要在子进程中复制内存映像和所有描述符 父子进程间的通信依赖IPC，尽管父进程在fork前向子进程传递信息容易，但子进程在fork后向父进程返回信息困难  1.2 线程共享 指令 大部分数据 文件描述符 信号处理函数和信号处置 当前工作目录 用户ID和组ID  1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNP Chapter 26 - Threads">
+<meta property="og:url" content="https://zhgaocs.github.io/2024/02/06/unp-ch26/index.html">
+<meta property="og:site_name" content="zhgaocs">
+<meta property="og:description" content="UNIX Network Programming—Chapter 26 Threads1. 概述1.1 fork的问题 fork成本高，需要在子进程中复制内存映像和所有描述符 父子进程间的通信依赖IPC，尽管父进程在fork前向子进程传递信息容易，但子进程在fork后向父进程返回信息困难  1.2 线程共享 指令 大部分数据 文件描述符 信号处理函数和信号处置 当前工作目录 用户ID和组ID  1">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-06T03:41:45.000Z">
+<meta property="article:modified_time" content="2024-02-06T09:40:03.715Z">
+<meta property="article:author" content="zhgaocs">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>UNP Chapter 26 - Threads - zhgaocs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhgaocs.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>zhgaocs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="UNP Chapter 26 - Threads"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-06 11:41" pubdate>
+          February 6, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.1k words
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">UNP Chapter 26 - Threads</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="UNIX-Network-Programming—Chapter-26-Threads"><a href="#UNIX-Network-Programming—Chapter-26-Threads" class="headerlink" title="UNIX Network Programming—Chapter 26 Threads"></a>UNIX Network Programming—Chapter 26 Threads</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><h3 id="1-1-fork的问题"><a href="#1-1-fork的问题" class="headerlink" title="1.1 fork的问题"></a>1.1 <code>fork</code>的问题</h3><ul>
+<li><code>fork</code>成本高，需要在子进程中复制内存映像和所有描述符</li>
+<li>父子进程间的通信依赖IPC，尽管父进程在<code>fork</code>前向子进程传递信息容易，但子进程在<code>fork</code>后向父进程返回信息困难</li>
+</ul>
+<h3 id="1-2-线程共享"><a href="#1-2-线程共享" class="headerlink" title="1.2 线程共享"></a>1.2 线程共享</h3><ul>
+<li>指令</li>
+<li>大部分数据</li>
+<li>文件描述符</li>
+<li>信号处理函数和信号处置</li>
+<li>当前工作目录</li>
+<li>用户ID和组ID</li>
+</ul>
+<h3 id="1-3-线程特有"><a href="#1-3-线程特有" class="headerlink" title="1.3 线程特有"></a>1.3 线程特有</h3><ul>
+<li>线程ID</li>
+<li>寄存器集合，包括PC和栈指针</li>
+<li>栈（局部变量和返回地址）</li>
+<li><code>errno</code></li>
+<li>信号掩码</li>
+<li>优先级</li>
+</ul>
+<h2 id="2-线程"><a href="#2-线程" class="headerlink" title="2. 线程"></a>2. 线程</h2><h3 id="2-1-属性（pthread-attr-t）"><a href="#2-1-属性（pthread-attr-t）" class="headerlink" title="2.1 属性（pthread_attr_t）"></a>2.1 属性（<code>pthread_attr_t</code>）</h3><p><code>pthread_attr_t</code> 是一个用于设定新线程属性的线程属性对象。这个结构体应被视为<strong>不透明</strong>，除了通过 <code>pthread</code> 库函数，任何直接访问都是不可移植的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> detachstate;               <span class="hljs-comment">// 线程的分离状态</span><br>    <span class="hljs-type">int</span> schedpolicy;               <span class="hljs-comment">// 线程调度策略</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sched_param</span> <span class="hljs-title">schedparam</span>;</span> <span class="hljs-comment">// 线程的调度参数</span><br>    <span class="hljs-type">int</span> inheritsched;              <span class="hljs-comment">// 线程的继承性</span><br>    <span class="hljs-type">int</span> scope;                     <span class="hljs-comment">// 线程的作用域</span><br>    <span class="hljs-type">size_t</span> guardsize;              <span class="hljs-comment">// 线程栈末尾的警戒缓冲区大小</span><br>    <span class="hljs-type">int</span> stackaddr_set;             <span class="hljs-comment">// 线程的栈设置</span><br>    <span class="hljs-type">void</span> *stackaddr;               <span class="hljs-comment">// 线程栈的位置</span><br>    <span class="hljs-type">size_t</span> stacksize;              <span class="hljs-comment">// 线程栈的大小</span><br>&#125; <span class="hljs-type">pthread_attr_t</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-1-1-初始化和销毁"><a href="#2-1-1-初始化和销毁" class="headerlink" title="2.1.1 初始化和销毁"></a>2.1.1 初始化和销毁</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_init</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-1-2-分离状态"><a href="#2-1-2-分离状态" class="headerlink" title="2.1.2 分离状态"></a>2.1.2 分离状态</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_setdetachstate</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">int</span> detachstate)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_getdetachstate</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">int</span> *detachstate)</span>;<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>detachstate</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>PTHREAD_CREATE_DETACHED</code></td>
+<td align="center">分离状态</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_CREATE_JOINABLE</code></td>
+<td align="center">可连接状态</td>
+</tr>
+</tbody></table>
+<h4 id="2-1-3-调度参数"><a href="#2-1-3-调度参数" class="headerlink" title="2.1.3 调度参数"></a>2.1.3 调度参数</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sched_param</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> sched_priority;<br>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_setschedparam</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sched_param *param)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_getschedparam</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-keyword">struct</span> sched_param *param)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-1-4-继承性"><a href="#2-1-4-继承性" class="headerlink" title="2.1.4 继承性"></a>2.1.4 继承性</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_setinheritsched</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">int</span> inheritsched)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_getinheritsched</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">int</span> *inheritsched)</span>;<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>inheritsched</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>PTHREAD_INHERIT_SCHED</code></td>
+<td align="center">继承创建线程的调度属性</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_EXPLICIT_SCHED</code></td>
+<td align="center">不继承，从属性对象指定的值中获取调度属性</td>
+</tr>
+</tbody></table>
+<h4 id="2-1-5-堆栈大小"><a href="#2-1-5-堆栈大小" class="headerlink" title="2.1.5 堆栈大小"></a>2.1.5 堆栈大小</h4><p>栈大小决定了创建线程将分配<strong>最小</strong>栈大小（以字节为单位）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_setstacksize</span><span class="hljs-params">(<span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">size_t</span> stacksize)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_attr_getstacksize</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">size_t</span> *stacksize)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-操作"><a href="#2-2-操作" class="headerlink" title="2.2 操作"></a>2.2 操作</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_create</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread, <span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">void</span> *(*start_routine)(<span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span>; <span class="hljs-comment">// 创建线程</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_join</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread, <span class="hljs-type">void</span> **retval)</span>; <span class="hljs-comment">// 等待线程</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_detach</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread)</span>; <span class="hljs-comment">// 分离线程</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">pthread_exit</span><span class="hljs-params">(<span class="hljs-type">void</span> *retval)</span>; <span class="hljs-comment">// 终止线程</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">pthread_t</span> <span class="hljs-title function_">pthread_self</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>; <span class="hljs-comment">// 获取线程ID</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="3-互斥锁"><a href="#3-互斥锁" class="headerlink" title="3. 互斥锁"></a>3. 互斥锁</h2><p>互斥锁是一种同步工具，用于控制多个线程对共享资源的并发访问。互斥锁的数据类型为<code>pthread_mutex_t</code></p>
+<h3 id="3-1-属性（pthread-mutexattr-t）"><a href="#3-1-属性（pthread-mutexattr-t）" class="headerlink" title="3.1 属性（pthread_mutexattr_t）"></a>3.1 属性（<code>pthread_mutexattr_t</code>）</h3><p>创建互斥锁时，可以通过设置其<code>pthread_mutexattr_t</code>类型的属性参数来定义锁的行为</p>
+<h4 id="3-1-1-初始化和销毁"><a href="#3-1-1-初始化和销毁" class="headerlink" title="3.1.1 初始化和销毁"></a>3.1.1 初始化和销毁</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-comment">// 初始化</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_init</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr)</span>;<br><span class="hljs-comment">// 销毁</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-1-2-锁类型"><a href="#3-1-2-锁类型" class="headerlink" title="3.1.2 锁类型"></a>3.1.2 锁类型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_gettype</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span> *<span class="hljs-keyword">restrict</span> attr, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> type)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_settype</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr, <span class="hljs-type">int</span> type)</span>;<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>type</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>PTHREAD_MUTEX_NORMAL</code></td>
+<td align="center">这种类型的互斥锁不会检测死锁。一个线程试图在没有先解锁的情况下重新锁定此互斥锁将导致死锁。试图解锁由不同线程锁定的互斥锁将导致未定义的行为。试图解锁未锁定的互斥锁将导致未定义的行为</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_MUTEX_ERRORCHECK</code></td>
+<td align="center">这种类型的互斥锁提供错误检查。一个线程试图在没有先解锁的情况下重新锁定此互斥锁将返回错误。一个线程试图解锁另一个线程已锁定的互斥锁将返回错误。一个线程试图解锁未锁定的互斥锁将返回错误</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_MUTEX_RECURSIVE</code></td>
+<td align="center">一个线程试图在没有先解锁的情况下重新锁定此互斥锁将成功锁定互斥锁。这种类型的互斥锁不会出现<code>PTHREAD_MUTEX_NORMAL</code>类型互斥锁可能出现的重新锁定死锁。这种类型的互斥锁的多次锁定需要相同数量的解锁才能释放互斥锁，然后其他线程才能获取互斥锁。一个线程试图解锁另一个线程已锁定的互斥锁将返回错误。一个线程试图解锁未锁定的互斥锁将返回错误</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_MUTEX_DEFAULT</code></td>
+<td align="center">试图递归锁定此类型的互斥锁将导致未定义的行为。试图解锁未由调用线程锁定的此类型的互斥锁将导致未定义的行为。试图解锁未锁定的此类型的互斥锁将导致未定义的行为。实现可能将此互斥锁映射到其他互斥锁类型</td>
+</tr>
+</tbody></table>
+<h4 id="3-1-3-范围"><a href="#3-1-3-范围" class="headerlink" title="3.1.3 范围"></a>3.1.3 范围</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_getpshared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span> *<span class="hljs-keyword">restrict</span> attr, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> pshared)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_setpshared</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr, <span class="hljs-type">int</span> pshared)</span>;<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>pshared</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>PTHREAD_PROCESS_PRIVATE</code></td>
+<td align="center">此属性表示只有初始化该互斥锁的同一进程中的线程才能操作该互斥锁。如果不同进程的线程试图操作此类互斥锁，只有初始化互斥锁的进程才会成功<em>（默认值）</em></td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_PROCESS_SHARED</code></td>
+<td align="center">此属性允许任何有权访问包含互斥锁对象内存的线程操作互斥锁，包括不同进程中的线程</td>
+</tr>
+</tbody></table>
+<h4 id="3-1-4-协议"><a href="#3-1-4-协议" class="headerlink" title="3.1.4 协议"></a>3.1.4 协议</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_getprotocol</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span> *<span class="hljs-keyword">restrict</span> attr, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> protocol)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_setprotocol</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr, <span class="hljs-type">int</span> protocol)</span>;<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>protocol</code></th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>PTHREAD_PRIO_NONE</code></td>
+<td align="center">当线程拥有此类型的互斥锁时，其优先级和调度不受其互斥锁所有权的影响</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_PRIO_INHERIT</code></td>
+<td align="center">当一个线程因拥有一个或多个具有<code>PTHREAD_PRIO_INHERIT</code>协议属性的互斥锁而阻塞更高优先级的线程时，只要它继续拥有互斥锁，它就应该以其优先级或等待任何由此线程拥有并使用此协议初始化的互斥锁的最高优先级的线程的优先级执行</td>
+</tr>
+<tr>
+<td align="center"><code>PTHREAD_PRIO_PROTECT</code></td>
+<td align="center">当一个线程拥有一个或多个使用<code>PTHREAD_PRIO_PROTECT</code>协议初始化的互斥锁时，无论是否有其他线程阻塞在这些互斥锁上，它都应该以其优先级或所有由此线程拥有并使用此属性初始化的互斥锁的优先级上限中的最高者执行</td>
+</tr>
+</tbody></table>
+<h4 id="3-1-5-优先级上限"><a href="#3-1-5-优先级上限" class="headerlink" title="3.1.5 优先级上限"></a>3.1.5 优先级上限</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_getprioceiling</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span> *<span class="hljs-keyword">restrict</span> attr, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> prioceiling)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutexattr_setprioceiling</span><span class="hljs-params">(<span class="hljs-type">pthread_mutexattr_t</span> *attr, <span class="hljs-type">int</span> prioceiling)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>prioceiling</code>范围：[0, <code>SCHED_FIFO</code>]</p>
+<h3 id="3-2-操作"><a href="#3-2-操作" class="headerlink" title="3.2 操作"></a>3.2 操作</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_init</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *<span class="hljs-keyword">restrict</span> mutex, <span class="hljs-type">const</span> <span class="hljs-type">pthread_mutexattr_t</span> *<span class="hljs-keyword">restrict</span> attr)</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_lock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_unlock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 尝试立即锁定一个互斥对象</span><br><span class="hljs-comment"> * 如果互斥对象已经被锁定，这个函数会立即返回一个错误，而不会阻塞调用线程</span><br><span class="hljs-comment"> * 如果成功锁定了互斥对象，函数就会返回成功</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_trylock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *mutex)</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 尝试锁定一个互斥对象</span><br><span class="hljs-comment"> * 如果互斥对象已经被锁定，这个函数会等待直到互斥对象可用或者达到了指定的超时时间</span><br><span class="hljs-comment"> * 如果成功锁定了互斥对象或者超时，函数就会返回</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_mutex_timedlock</span><span class="hljs-params">(<span class="hljs-type">pthread_mutex_t</span> *<span class="hljs-keyword">restrict</span> mutex, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> timespec *<span class="hljs-keyword">restrict</span> abs_timeout)</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-条件变量"><a href="#4-条件变量" class="headerlink" title="4. 条件变量"></a>4. 条件变量</h2><h3 id="4-1-属性（pthread-condattr-t）"><a href="#4-1-属性（pthread-condattr-t）" class="headerlink" title="4.1 属性（pthread_condattr_t）"></a>4.1 属性（<code>pthread_condattr_t</code>）</h3><h4 id="4-1-1-初始化和销毁"><a href="#4-1-1-初始化和销毁" class="headerlink" title="4.1.1 初始化和销毁"></a>4.1.1 初始化和销毁</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_condattr_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_condattr_t</span> *attr)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_condattr_init</span><span class="hljs-params">(<span class="hljs-type">pthread_condattr_t</span> *attr)</span>;<br></code></pre></td></tr></table></figure>
+
+<h4 id="4-1-2-范围"><a href="#4-1-2-范围" class="headerlink" title="4.1.2 范围"></a>4.1.2 范围</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_condattr_getpshared</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">pthread_condattr_t</span> *<span class="hljs-keyword">restrict</span> attr, <span class="hljs-type">int</span> *<span class="hljs-keyword">restrict</span> pshared)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_condattr_setpshared</span><span class="hljs-params">(<span class="hljs-type">pthread_condattr_t</span> *attr, <span class="hljs-type">int</span> pshared)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>参数<code>pshared</code>同<code>pthread_mutexattr_getpshared</code>&#x2F;<code>pthread_mutexattr_setpshared</code></p>
+<h3 id="4-2-操作"><a href="#4-2-操作" class="headerlink" title="4.2 操作"></a>4.2 操作</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_destroy</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_init</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *<span class="hljs-keyword">restrict</span> cond, <span class="hljs-type">const</span> <span class="hljs-type">pthread_condattr_t</span> *<span class="hljs-keyword">restrict</span> attr)</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">pthread_cond_t</span> cond = PTHREAD_COND_INITIALIZER;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_timedwait</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *<span class="hljs-keyword">restrict</span> cond, <span class="hljs-type">pthread_mutex_t</span> *<span class="hljs-keyword">restrict</span> mutex,</span><br><span class="hljs-params">                           <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> timespec *<span class="hljs-keyword">restrict</span> abstime)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_wait</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *<span class="hljs-keyword">restrict</span> cond, <span class="hljs-type">pthread_mutex_t</span> *<span class="hljs-keyword">restrict</span> mutex)</span>; <span class="hljs-comment">// 阻塞当前线程，等待唤醒</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_broadcast</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span>; <span class="hljs-comment">// 唤醒所有正在pthread_cond_wait函数阻塞的线程</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 发送一个信号给另外一个正在处于阻塞等待状态的线程，使其脱离阻塞状态，继续执行</span><br><span class="hljs-comment"> * 如果没有线程处在阻塞等待状态，也会成功返回</span><br><span class="hljs-comment"> * 最多只给一个线程发信号</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_cond_signal</span><span class="hljs-params">(<span class="hljs-type">pthread_cond_t</span> *cond)</span>;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reading-Notes/" class="category-chain-item">Reading Notes</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Reading-Notes/UNP/" class="category-chain-item">UNP</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/" class="print-no-link">#linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"zhgaocs/zhgaocs.github.io","repo-id":"R_kgDOKEb5DA","category":"Announcements","category-id":"DIC_kwDOKEb5DM4CZqPN","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+        <span>Powered by</span> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <span>&</span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
