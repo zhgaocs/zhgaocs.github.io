@@ -16,15 +16,15 @@
   <meta name="author" content="zhgaocs">
   <meta name="keywords" content="">
   
-    <meta name="description" content="UNIX Network Programming—Chapter 03 Sockets Introduction1. 套接字地址结构1.1 通用套接字地址结构1.1.1 目的提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（bind、connect、accept等）的参数是指向struct sockaddr的指针 1.1.2 原型1234567">
+    <meta name="description" content="UNIX Network Programming—Chapter 03 套接字编程简介1. 套接字地址结构1.1 通用套接字地址结构1.1.1 目的提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（bind、connect、accept等）的参数是指向struct sockaddr的指针 1.1.2 原型1234567#include &lt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UNP Chapter 03 - Sockets Introduction">
 <meta property="og:url" content="https://zhgaocs.github.io/2024/03/02/unp-ch03/index.html">
 <meta property="og:site_name" content="zhgaocs">
-<meta property="og:description" content="UNIX Network Programming—Chapter 03 Sockets Introduction1. 套接字地址结构1.1 通用套接字地址结构1.1.1 目的提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（bind、connect、accept等）的参数是指向struct sockaddr的指针 1.1.2 原型1234567">
+<meta property="og:description" content="UNIX Network Programming—Chapter 03 套接字编程简介1. 套接字地址结构1.1 通用套接字地址结构1.1.1 目的提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（bind、connect、accept等）的参数是指向struct sockaddr的指针 1.1.2 原型1234567#include &lt;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-03-02T10:55:32.000Z">
-<meta property="article:modified_time" content="2024-03-02T10:58:54.355Z">
+<meta property="article:modified_time" content="2024-03-25T07:41:26.393Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -265,7 +265,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="UNIX-Network-Programming—Chapter-03-Sockets-Introduction"><a href="#UNIX-Network-Programming—Chapter-03-Sockets-Introduction" class="headerlink" title="UNIX Network Programming—Chapter 03 Sockets Introduction"></a>UNIX Network Programming—Chapter 03 Sockets Introduction</h1><h2 id="1-套接字地址结构"><a href="#1-套接字地址结构" class="headerlink" title="1. 套接字地址结构"></a>1. 套接字地址结构</h2><h3 id="1-1-通用套接字地址结构"><a href="#1-1-通用套接字地址结构" class="headerlink" title="1.1 通用套接字地址结构"></a>1.1 通用套接字地址结构</h3><h4 id="1-1-1-目的"><a href="#1-1-1-目的" class="headerlink" title="1.1.1 目的"></a>1.1.1 目的</h4><p>提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（<code>bind</code>、<code>connect</code>、<code>accept</code>等）的参数是指向<code>struct sockaddr</code>的指针</p>
+                <h1 id="UNIX-Network-Programming—Chapter-03-套接字编程简介"><a href="#UNIX-Network-Programming—Chapter-03-套接字编程简介" class="headerlink" title="UNIX Network Programming—Chapter 03 套接字编程简介"></a>UNIX Network Programming—Chapter 03 套接字编程简介</h1><h2 id="1-套接字地址结构"><a href="#1-套接字地址结构" class="headerlink" title="1. 套接字地址结构"></a>1. 套接字地址结构</h2><h3 id="1-1-通用套接字地址结构"><a href="#1-1-通用套接字地址结构" class="headerlink" title="1.1 通用套接字地址结构"></a>1.1 通用套接字地址结构</h3><h4 id="1-1-1-目的"><a href="#1-1-1-目的" class="headerlink" title="1.1.1 目的"></a>1.1.1 目的</h4><p>提供一种通用的方式来处理各种类型的套接字地址，包括IPv4、IPv6、Unix域套接字。许多套接字函数（<code>bind</code>、<code>connect</code>、<code>accept</code>等）的参数是指向<code>struct sockaddr</code>的指针</p>
 <h4 id="1-1-2-原型"><a href="#1-1-2-原型" class="headerlink" title="1.1.2 原型"></a>1.1.2 原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/socket.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">sa_family_t</span> sa_family; <span class="hljs-comment">/* address family */</span><br>    <span class="hljs-type">char</span> sa_data[<span class="hljs-number">14</span>];      <span class="hljs-comment">/* protocol-specific address */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <h3 id="1-2-IPv4套接字地址结构"><a href="#1-2-IPv4套接字地址结构" class="headerlink" title="1.2 IPv4套接字地址结构"></a>1.2 IPv4套接字地址结构</h3><p>又称<strong>网际套接字地址结构</strong></p>
