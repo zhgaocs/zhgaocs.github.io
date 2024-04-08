@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>UNP Chapter 07 - Socket Options</title>
+    <link href="/2024/04/08/unp-ch07/"/>
+    <url>/2024/04/08/unp-ch07/</url>
+    
+    <content type="html"><![CDATA[<h1 id="UNIX-Network-Programming—Chapter-07-套接字选项"><a href="#UNIX-Network-Programming—Chapter-07-套接字选项" class="headerlink" title="UNIX Network Programming—Chapter 07 套接字选项"></a>UNIX Network Programming—Chapter 07 套接字选项</h1><h2 id="1-getsockopt和setsockopt函数"><a href="#1-getsockopt和setsockopt函数" class="headerlink" title="1. getsockopt和setsockopt函数"></a>1. <code>getsockopt</code>和<code>setsockopt</code>函数</h2><h3 id="1-1-功能"><a href="#1-1-功能" class="headerlink" title="1.1 功能"></a>1.1 功能</h3><p>获取&#x2F;设置套接字选项</p><h3 id="1-2-函数原型"><a href="#1-2-函数原型" class="headerlink" title="1.2 函数原型"></a>1.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/socket.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回0，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">getsockopt</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">int</span> level, <span class="hljs-type">int</span> optname, <span class="hljs-type">void</span> *optval, <span class="hljs-type">socklen_t</span> *optlen)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">setsockopt</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">int</span> level, <span class="hljs-type">int</span> optname, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *optval, <span class="hljs-type">socklen_t</span> optlen)</span>;<br></code></pre></td></tr></table></figure><h3 id="1-3-参数sockfd"><a href="#1-3-参数sockfd" class="headerlink" title="1.3 参数sockfd"></a>1.3 参数<code>sockfd</code></h3><p>指向一个<strong>打开</strong>的套接字描述符</p><h3 id="1-4-参数level"><a href="#1-4-参数level" class="headerlink" title="1.4 参数level"></a>1.4 参数<code>level</code></h3><p>套接字选项所在的协议层，常用值如下：</p><ul><li><code>SOL_SOCKET</code>：通用套接字选项<em>（SOL为Socket Option Level的简称）</em></li><li><code>IPPROTO_IP</code></li><li><code>IPPROTO_IPV6</code></li><li><code>IPPROTO_ICMPV6</code></li><li><code>IPPROTO_TCP</code></li><li><code>IPPROTO_SCTP</code></li></ul><h3 id="1-5-参数optname"><a href="#1-5-参数optname" class="headerlink" title="1.5 参数optname"></a>1.5 参数<code>optname</code></h3><p>选项名</p><ul><li><p>通用套接字选项<em>（<code>level</code>为<code>SOL_SOCKET</code>）</em></p><ul><li><code>SO_BROADCAST</code>：启用广播消息传输和接收<em>（仅UDP）</em></li><li><code>SO_DEBUG</code>：开启调试模式<em>（仅TCP）</em></li><li><code>SO_DONTROUTE</code>：直接发送数据，忽略路由表</li><li><code>SO_ERROR</code>：检索并清除错误状态</li><li><code>SO_KEEPALIVE</code>：发送保活信号，确认远端主机可达</li><li><code>SO_LINGER</code>：定义套接字关闭的行为</li><li><code>SO_OOBINLINE</code>：将带外数据整合入正常数据流</li><li><code>SO_RCVBUF</code>和<code>SO_SNDBUF</code>：设定接收和发送缓冲区大小</li><li><code>SO_RCVLOWAT</code>和<code>SO_SNDLOWAT</code>：设定接收和发送缓冲区最小水位</li><li><code>SO_RCVTIMEO</code>和<code>SO_SNDTIMEO</code>：设定接收和发送超时时间</li><li><code>SO_REUSEADDR</code>和<code>SO_REUSEPORT</code>：允许地址和端口复用</li><li><code>SO_TYPE</code>：套接字类型<em>（如<code>SOCK_STREAM</code>）</em></li><li><code>SO_USELOOPBACK</code>：数据通过本地回环接口发送</li></ul></li><li><p>IPV4套接字选项<em>（<code>level</code>为<code>IPPROTO_IP</code>）</em></p><ul><li><code>IP_HDRINCL</code>：启用时，数据包包含IP头（接收时总是包含）</li><li><code>IP_OPTIONS</code>：在IP头中设置选项，如源路由</li><li><code>IP_RECVDSTADDR</code>：返回接收UDP数据报的目标IP地址</li><li><code>IP_TOS</code>：设定IPv4头中的服务类型字段</li><li><code>IP_TTL</code>：限制数据包的生存时间，防止循环</li></ul></li><li><p>ICMPv6套接字选项<em>（<code>level</code>为<code>IPPROTO_ICMPV6</code>）</em></p><ul><li><code>ICMP6_FILTER</code>：设定或获取ICMPv6消息过滤器，控制消息传递</li></ul></li><li><p>IPv6套接字选项<em>（<code>level</code>为<code>IPPROTO_IPV6</code>）</em></p><ul><li><p><code>IPV6_CHECKSUM</code>：设置原始套接字的校验和偏移</p></li><li><p><code>IPV6_DONTFRAG</code>：禁止数据包分片</p></li><li><p><code>IPV6_NEXTHOP</code>：指定下一跳地址</p></li><li><p><code>IPV6_PATHMTU</code>：启用路径MTU发现</p></li><li><p><code>IPV6_RECVDSTOPTS</code>：接收目的地选项</p></li><li><p><code>IPV6_RECVHOPLIMIT</code>：接收跳数限制</p></li><li><p><code>IPV6_RECVHOPOPTS</code>：接收跳跃选项</p></li><li><p><code>IPV6_RECVPATHMTU</code>：接收路径MTU</p></li><li><p><code>IPV6_RECVPKTINFO</code>：接收数据包信息</p></li><li><p><code>IPV6_RECVRTHDR</code>：接收路由头信息</p></li><li><p><code>IPV6_RECVTCLASS</code>：接收流量类别</p></li><li><p><code>IPV6_UNICAST_HOPS</code>：设置单播跳数</p></li><li><p><code>IPV6_USE_MIN_MTU</code>：使用最小MTU</p></li><li><p><code>IPV6_V6ONLY</code>：仅使用IPv6</p></li></ul></li><li><p>TCP套接字选项<em>（<code>level</code>为<code>IPPROTO_TCP</code>）</em></p><ul><li><code>TCP_MAXSEG</code>：设置TCP最大段大小</li><li><code>TCP_NODELAY</code>：禁用Nagle算法</li></ul></li><li><p>SCTP套接字选项<em>（<code>level</code>为<code>IPPROTO_SCTP</code>）</em></p><ul><li><code>SCTP_ADAPTION_LAYER</code>：设置适配层指示</li><li><code>SCTP_ASSOCINFO</code>：获取或设置关联特定信息</li><li><code>SCTP_AUTOCLOSE</code>：设置自动关闭时间</li><li><code>SCTP_DEFAULT_SEND_PARAM</code>：设置默认发送参数</li><li><code>SCTP_EVENTS</code>：订阅SCTP事件</li><li><code>SCTP_GET_ADDR_INFO</code>：获取地址信息</li><li><code>SCTP_I_WANT_MAPPED_V4_ADDR</code>：允许映射IPv4地址</li><li><code>SCTP_INITMSG</code>：设置初始消息参数</li><li><code>SCTP_MAXSEG</code>：设置最大段大小</li><li><code>SCTP_NODELAY</code>：禁用或启用Nagle算法</li><li><code>SCTP_PEER_ADDR_PARAMS</code>：设置对等地址参数</li><li><code>SCTP_PRIMARY_ADDR</code>：设置主地址</li><li><code>SCTP_RTOINFO</code>：获取或设置重传超时信息</li><li><code>SCTP_SET_PEER_PRIMARY_ADDR</code>：设置对等主地址</li><li><code>SCTP_STATUS</code>：获取关联状态信息</li></ul></li></ul><h2 id="2-fcntl函数"><a href="#2-fcntl函数" class="headerlink" title="2. fcntl函数"></a>2. <code>fcntl</code>函数</h2><h3 id="2-1-函数原型"><a href="#2-1-函数原型" class="headerlink" title="2.1 函数原型"></a>2.1 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回值取决于cmd，出错返回-1</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">fcntl</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">int</span> cmd, ... <span class="hljs-comment">/* arg */</span>)</span>;<br></code></pre></td></tr></table></figure><h3 id="2-2-用法"><a href="#2-2-用法" class="headerlink" title="2.2 用法"></a>2.2 用法</h3><ul><li>非阻塞式I&#x2F;O</li></ul><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">fcntl(fd, F_SETFL, O_NONBLOCK);<br></code></pre></td></tr></table></figure><ul><li>信号驱动式I&#x2F;O</li></ul><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">fcntl(fd, F_SETFL, O_ASYNC);<br></code></pre></td></tr></table></figure><ul><li>获取当前设置为接收<code>SIGIO</code>和<code>SIGURG</code>信号的进程ID或进程组ID</li></ul><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">pid = fcntl(fd, F_GETOWN);<br></code></pre></td></tr></table></figure><ul><li>设置接收<code>SIGIO</code>和<code>SIGURG</code>信号的进程ID或进程组ID</li></ul><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">fcntl(fd, F_SETOWN, pid);<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Reading Notes</category>
+      
+      <category>UNP</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>unix</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>UNP Chapter 06 - I/O Multiplexing</title>
     <link href="/2024/04/06/unp-ch06/"/>
     <url>/2024/04/06/unp-ch06/</url>
@@ -22,7 +49,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -107,7 +134,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -134,7 +161,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -161,7 +188,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -242,7 +269,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -269,7 +296,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -296,7 +323,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -323,7 +350,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -408,7 +435,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
@@ -462,7 +489,7 @@
     
     <tags>
       
-      <tag>linux</tag>
+      <tag>unix</tag>
       
     </tags>
     
