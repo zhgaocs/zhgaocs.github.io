@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/github.png">
+  <link rel="icon" href="/img/github.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="zhgaocs">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="UNIX Network Programming—Chapter 11 名字与地址转换1. gethostbyname函数1.1 功能根据主机名获取对应的IP地址信息 1.2 hostent结构体12345678struct hostent &#x2F;&#x2F; host entry&amp;#123;    char  *h_name;      &#x2F;&#x2F; 正式主机名    char **h_aliases;   &#x2F;&#x2F; 主">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNP Chapter 11 - Name and Address Conversions">
+<meta property="og:url" content="https://zhgaocs.github.io/2024/05/07/unp-ch11/index.html">
+<meta property="og:site_name" content="zhgaocs">
+<meta property="og:description" content="UNIX Network Programming—Chapter 11 名字与地址转换1. gethostbyname函数1.1 功能根据主机名获取对应的IP地址信息 1.2 hostent结构体12345678struct hostent &#x2F;&#x2F; host entry&amp;#123;    char  *h_name;      &#x2F;&#x2F; 正式主机名    char **h_aliases;   &#x2F;&#x2F; 主">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhgaocs.github.io/2024/05/07/unp-ch11/hostent.png">
+<meta property="article:published_time" content="2024-05-07T11:29:10.000Z">
+<meta property="article:modified_time" content="2024-05-07T11:32:29.462Z">
+<meta property="article:author" content="zhgaocs">
+<meta property="article:tag" content="unix">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://zhgaocs.github.io/2024/05/07/unp-ch11/hostent.png">
+  
+  
+  
+  <title>UNP Chapter 11 - Name and Address Conversions - zhgaocs</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhgaocs.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>zhgaocs</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="UNP Chapter 11 - Name and Address Conversions"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-07 19:29" pubdate>
+          May 7, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k words
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">UNP Chapter 11 - Name and Address Conversions</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="UNIX-Network-Programming—Chapter-11-名字与地址转换"><a href="#UNIX-Network-Programming—Chapter-11-名字与地址转换" class="headerlink" title="UNIX Network Programming—Chapter 11 名字与地址转换"></a>UNIX Network Programming—Chapter 11 名字与地址转换</h1><h2 id="1-gethostbyname函数"><a href="#1-gethostbyname函数" class="headerlink" title="1. gethostbyname函数"></a>1. <code>gethostbyname</code>函数</h2><h3 id="1-1-功能"><a href="#1-1-功能" class="headerlink" title="1.1 功能"></a>1.1 功能</h3><p>根据主机名获取对应的IP地址信息</p>
+<h3 id="1-2-hostent结构体"><a href="#1-2-hostent结构体" class="headerlink" title="1.2 hostent结构体"></a>1.2 <code>hostent</code>结构体</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">hostent</span> // <span class="hljs-title">host</span> <span class="hljs-title">entry</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span>  *h_name;      <span class="hljs-comment">// 正式主机名</span><br>    <span class="hljs-type">char</span> **h_aliases;   <span class="hljs-comment">// 主机别名</span><br>    <span class="hljs-type">int</span>    h_addrtype;  <span class="hljs-comment">// 主机IP地址类型：IPV4-AF_INET</span><br>    <span class="hljs-type">int</span>    h_length;    <span class="hljs-comment">// 主机IP地址字节长度，对于IPv4是四字节，即32位</span><br>    <span class="hljs-type">char</span> **h_addr_list; <span class="hljs-comment">// 主机的IP地址列表</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/05/07/unp-ch11/hostent.png" srcset="/img/loading.gif" lazyload alt="hostent结构和它所包含的信息"></p>
+<h3 id="1-3-函数原型"><a href="#1-3-函数原型" class="headerlink" title="1.3 函数原型"></a>1.3 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> hostent *<span class="hljs-title function_">gethostbyname</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *hostname)</span>; <span class="hljs-comment">// 成功返回非空指针，出错返回NULL且置h_errno</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-4-h-errno"><a href="#1-4-h-errno" class="headerlink" title="1.4 h_errno"></a>1.4 <code>h_errno</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> h_errno;<br><br><span class="hljs-type">char</span> *<span class="hljs-title function_">hstrerror</span><span class="hljs-params">(<span class="hljs-type">int</span> err)</span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>h_errno</code>常值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">值</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>HOST_NOT_FOUND</code></td>
+<td align="center">无法识别主机名</td>
+</tr>
+<tr>
+<td align="center"><code>TRY_AGAIN</code></td>
+<td align="center">服务器暂时无法处理请求，稍后可能成功</td>
+</tr>
+<tr>
+<td align="center"><code>NO_RECOVERY</code></td>
+<td align="center">发生了不可恢复的错误，例如服务器的数据文件损坏</td>
+</tr>
+<tr>
+<td align="center"><code>NO_DATA</code></td>
+<td align="center">请求的主机名有效，但没有与之关联的数据</td>
+</tr>
+</tbody></table>
+<h3 id="1-5-缺点"><a href="#1-5-缺点" class="headerlink" title="1.5 缺点"></a>1.5 缺点</h3><ul>
+<li>只能处理IPv4地址</li>
+<li>线程不安全</li>
+</ul>
+<h2 id="2-gethostbyaddr函数"><a href="#2-gethostbyaddr函数" class="headerlink" title="2. gethostbyaddr函数"></a>2. <code>gethostbyaddr</code>函数</h2><h3 id="2-1-功能"><a href="#2-1-功能" class="headerlink" title="2.1 功能"></a>2.1 功能</h3><p>根据IP地址获取主机信息</p>
+<h3 id="2-2-函数原型"><a href="#2-2-函数原型" class="headerlink" title="2.2 函数原型"></a>2.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-comment">// 成功返回非空指针，出错返回NULL且置h_errno</span><br><span class="hljs-keyword">struct</span> hostent *<span class="hljs-title function_">gethostbyaddr</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *addr, <span class="hljs-type">socklen_t</span> len, <span class="hljs-type">int</span> family)</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-参数addr"><a href="#2-3-参数addr" class="headerlink" title="2.3 参数addr"></a>2.3 参数<code>addr</code></h3><p>指向含有IPv4或IPv6地址的结构<code>in_addr</code>或<code>in6_addr</code>，使用时需要<strong>强制类型转化</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">in_addr</span> <span class="hljs-title">addr</span>;</span><br>inet_pton(AF_INET, <span class="hljs-string">&quot;127.0.0.1&quot;</span>, &amp;addr);<br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">hostent</span> *<span class="hljs-title">hptr</span> =</span> gethostbyaddr(&amp;addr, <span class="hljs-keyword">sizeof</span>(addr), AF_INET);<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-缺点"><a href="#2-4-缺点" class="headerlink" title="2.4 缺点"></a>2.4 缺点</h3><ul>
+<li>只能处理IPv4地址</li>
+<li>线程不安全</li>
+</ul>
+<h2 id="3-getservbyname函数"><a href="#3-getservbyname函数" class="headerlink" title="3. getservbyname函数"></a>3. <code>getservbyname</code>函数</h2><h3 id="3-1-功能"><a href="#3-1-功能" class="headerlink" title="3.1 功能"></a>3.1 功能</h3><p>根据<strong>服务名称</strong>和协议获取<strong>服务信息</strong></p>
+<h3 id="3-2-servent结构体"><a href="#3-2-servent结构体" class="headerlink" title="3.2 servent结构体"></a>3.2 <code>servent</code>结构体</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">servent</span> // <span class="hljs-title">service</span> <span class="hljs-title">entry</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span>   *s_name;    <span class="hljs-comment">// 正规的服务名</span><br>    <span class="hljs-type">char</span>  **s_aliases; <span class="hljs-comment">// 服务别名列表</span><br>    <span class="hljs-type">int</span>     s_port;    <span class="hljs-comment">// 端口号</span><br>    <span class="hljs-type">char</span>   *s_proto;   <span class="hljs-comment">// 使用的协议</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-3-函数原型"><a href="#3-3-函数原型" class="headerlink" title="3.3 函数原型"></a>3.3 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> servent *<span class="hljs-title function_">getservbyname</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *servname, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *protoname)</span>; <span class="hljs-comment">// 成功返回非空指针，出错返回NULL</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-4-参数"><a href="#3-4-参数" class="headerlink" title="3.4 参数"></a>3.4 参数</h3><p>字符串参数的名称应参照<code>/etc/services</code>文件</p>
+<h3 id="3-5-使用示例"><a href="#3-5-使用示例" class="headerlink" title="3.5 使用示例"></a>3.5 使用示例</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">servent</span> *<span class="hljs-title">sptr</span>;</span><br><br>sptr = getservbyname(<span class="hljs-string">&quot;domain&quot;</span>, <span class="hljs-string">&quot;udp&quot;</span>); <span class="hljs-comment">/* DNS using UDP */</span><br>sptr = getservbyname(<span class="hljs-string">&quot;ftp&quot;</span>, <span class="hljs-string">&quot;tcp&quot;</span>);    <span class="hljs-comment">/* FTP using TCP */</span><br>sptr = getservbyname(<span class="hljs-string">&quot;ftp&quot;</span>, <span class="hljs-literal">NULL</span>);     <span class="hljs-comment">/* FTP using TCP */</span><br>sptr = getservbyname(<span class="hljs-string">&quot;ftp&quot;</span>, <span class="hljs-string">&quot;udp&quot;</span>);    <span class="hljs-comment">/* this call will fail */</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="4-getservbyport函数"><a href="#4-getservbyport函数" class="headerlink" title="4. getservbyport函数"></a>4. <code>getservbyport</code>函数</h2><h3 id="4-1-功能"><a href="#4-1-功能" class="headerlink" title="4.1 功能"></a>4.1 功能</h3><p>根据端口号和协议获取服务信息</p>
+<h3 id="4-2-函数原型"><a href="#4-2-函数原型" class="headerlink" title="4.2 函数原型"></a>4.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> servent *<span class="hljs-title function_">getservbyport</span><span class="hljs-params">(<span class="hljs-type">int</span> port, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *protoname)</span>; <span class="hljs-comment">// 成功返回非空指针，出错返回NULL</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-参数port"><a href="#4-3-参数port" class="headerlink" title="4.3 参数port"></a>4.3 参数<code>port</code></h3><p><code>port</code>参数的值必须为<strong>网络字节序</strong></p>
+<h3 id="4-4-使用示例"><a href="#4-4-使用示例" class="headerlink" title="4.4 使用示例"></a>4.4 使用示例</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">servent</span> *<span class="hljs-title">sptr</span>;</span><br><br>sptr = getservbyport(htons(<span class="hljs-number">53</span>), <span class="hljs-string">&quot;udp&quot;</span>); <span class="hljs-comment">/* DNS using UDP */</span><br>sptr = getservbyport(htons(<span class="hljs-number">21</span>), <span class="hljs-string">&quot;tcp&quot;</span>); <span class="hljs-comment">/* FTP using TCP */</span><br>sptr = getservbyport(htons(<span class="hljs-number">21</span>), <span class="hljs-literal">NULL</span>);  <span class="hljs-comment">/* FTP using TCP */</span><br>sptr = getservbyport(htons(<span class="hljs-number">21</span>), <span class="hljs-string">&quot;udp&quot;</span>); <span class="hljs-comment">/* this call will fail */</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-getaddrinfo函数"><a href="#5-getaddrinfo函数" class="headerlink" title="5. getaddrinfo函数"></a>5. <code>getaddrinfo</code>函数</h2><h3 id="5-1-功能"><a href="#5-1-功能" class="headerlink" title="5.1 功能"></a>5.1 功能</h3><p>将主机名和服务名解析为相应的套接字地址结构</p>
+<h3 id="5-2-addrinfo结构体"><a href="#5-2-addrinfo结构体" class="headerlink" title="5.2 addrinfo结构体"></a>5.2 <code>addrinfo</code>结构体</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">addrinfo</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> ai_flags;             <span class="hljs-comment">/* 输入标志，修改函数行为 */</span><br>    <span class="hljs-type">int</span> ai_family;            <span class="hljs-comment">/* 地址族，如AF_INET（IPv4） */</span><br>    <span class="hljs-type">int</span> ai_socktype;          <span class="hljs-comment">/* 套接字类型，如SOCK_STREAM（流套接字） */</span><br>    <span class="hljs-type">int</span> ai_protocol;          <span class="hljs-comment">/* 协议类型，0表示自动选择 */</span><br>    <span class="hljs-type">size_t</span> ai_addrlen;        <span class="hljs-comment">/* ai_addr的长度 */</span><br>    <span class="hljs-type">char</span> *ai_canonname;       <span class="hljs-comment">/* 主机的规范名 */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr</span> *<span class="hljs-title">ai_addr</span>;</span> <span class="hljs-comment">/* 套接字地址 */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">addrinfo</span> *<span class="hljs-title">ai_next</span>;</span> <span class="hljs-comment">/* 下一个addrinfo结构 */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-函数原型"><a href="#5-3-函数原型" class="headerlink" title="5.3 函数原型"></a>5.3 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">getaddrinfo</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *hostname, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *service, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> addrinfo *hints,</span><br><span class="hljs-params">                <span class="hljs-keyword">struct</span> addrinfo **result)</span>; <span class="hljs-comment">// 成功返回0，出错返回非0</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-参数hostname"><a href="#5-4-参数hostname" class="headerlink" title="5.4 参数hostname"></a>5.4 参数<code>hostname</code></h3><p>主机名或地址串<em>（IPv4的点分十进制串或IPv6的十六进制数串）</em></p>
+<h3 id="5-5-参数service"><a href="#5-5-参数service" class="headerlink" title="5.5 参数service"></a>5.5 参数<code>service</code></h3><p>服务名或十进制端口号数串</p>
+<h3 id="5-6-参数hints"><a href="#5-6-参数hints" class="headerlink" title="5.6 参数hints"></a>5.6 参数<code>hints</code></h3><p><code>hints</code>参数是一个指向<code>addrinfo</code>结构的指针，用于指定期望<code>getaddrinfo</code>函数返回的地址信息的类型。</p>
+<ul>
+<li><code>NULL</code>：如果<code>hints</code>参数为<code>NULL</code>，函数将返回所有类型的地址信息，包括不同的地址族（如IPv4和IPv6），不同的套接字类型（如流套接字和数据报套接字），以及不同的协议类型（如TCP和UDP）</li>
+<li>非<code>NULL</code>：如果<code>hints</code>参数非<code>NULL</code>，调用者可以设置的成员如下<ul>
+<li><code>ai_flags</code>：输入标志，用于修改函数的行为。例如：<ul>
+<li><code>AI_PASSIVE</code>：套接字将用于监听</li>
+<li><code>AI_CANONNAME</code>：请求返回规范名</li>
+<li><code>AI_NUMERICHOST</code>：<code>hostname</code>必须是数字地址字符串</li>
+<li><code>AI_NUMERICSERV</code>：<code>service</code>必须是数字端口号</li>
+<li><code>AI_V4MAPPED</code>：如果没有找到IPv6地址，则返回映射到IPv6格式的IPv4地址</li>
+<li><code>AI_ALL</code>：在IPv6地址后面返回IPv4地址</li>
+<li><code>AI_ADDRCONFIG</code>：只返回与系统配置的地址类型相对应的地址</li>
+</ul>
+</li>
+<li><code>ai_family</code>：地址族，例如<code>AF_INET</code>表示IPv4，<code>AF_INET6</code>表示IPv6，<code>AF_UNSPEC</code>表示任何地址族</li>
+<li><code>ai_socktype</code>：套接字类型，例如<code>SOCK_STREAM</code>表示流套接字，<code>SOCK_DGRAM</code>表示数据报套接字</li>
+<li><code>ai_protocol</code>：协议类型，通常为0，表示自动选择，或者为<code>IPPROTO_TCP</code>（TCP协议）或<code>IPPROTO_UDP</code>（UDP协议）</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-7-返回值"><a href="#5-7-返回值" class="headerlink" title="5.7 返回值"></a>5.7 返回值</h3><table>
+<thead>
+<tr>
+<th align="center">常值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>EAI_AGAIN</code></td>
+<td align="center">名字解析中临时失败</td>
+</tr>
+<tr>
+<td align="center"><code>EAI_BADFLAGS</code></td>
+<td align="center"><code>ai_flags</code>的值无效</td>
+</tr>
+<tr>
+<td align="center"><code>EAI_FAIL</code></td>
+<td align="center">名字解析中不可恢复地失败</td>
+</tr>
+<tr>
+<td align="center"><code>EAI_FAMILY</code></td>
+<td align="center">不支持<code>ai_family</code></td>
+</tr>
+<tr>
+<td align="center"><code>EAI_MEMORY</code></td>
+<td align="center">内存分配失败</td>
+</tr>
+<tr>
+<td align="center"><code>EAI_NONAME</code></td>
+<td align="center"><code>hostname</code>或<code>service</code>未提供，或者不可知</td>
+</tr>
+<tr>
+<td align="center"><code>EAI_OVERFLOW</code></td>
+<td align="center">用户参数缓冲区溢出<em>（仅限<code>getnameinfo</code>）</em></td>
+</tr>
+<tr>
+<td align="center"><code>EAI_SERVICE</code></td>
+<td align="center">不支持<code>ai_socktype</code>类型的<code>service</code></td>
+</tr>
+<tr>
+<td align="center"><code>EAI_SOCKTYPE</code></td>
+<td align="center">不支持<code>ai_socktype</code></td>
+</tr>
+<tr>
+<td align="center"><code>EAI_SYSTEM</code></td>
+<td align="center">在<code>errno</code>变量中有系统错误返回</td>
+</tr>
+</tbody></table>
+<h2 id="6-gai-strerror函数"><a href="#6-gai-strerror函数" class="headerlink" title="6. gai_strerror函数"></a>6. <code>gai_strerror</code>函数</h2><h3 id="6-1-功能"><a href="#6-1-功能" class="headerlink" title="6.1 功能"></a>6.1 功能</h3><p>返回<code>getaddrinfo</code>或<code>getnameinfo</code>函数错误值的描述字符串</p>
+<h3 id="6-2-函数原型"><a href="#6-2-函数原型" class="headerlink" title="6.2 函数原型"></a>6.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-type">const</span> <span class="hljs-type">char</span> *<span class="hljs-title function_">gai_strerror</span><span class="hljs-params">(<span class="hljs-type">int</span> error)</span>; <span class="hljs-comment">// 返回指向错误描述消息字符串的指针</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="7-freeaddrinfo函数"><a href="#7-freeaddrinfo函数" class="headerlink" title="7. freeaddrinfo函数"></a>7. <code>freeaddrinfo</code>函数</h2><h3 id="7-1-功能"><a href="#7-1-功能" class="headerlink" title="7.1 功能"></a>7.1 功能</h3><p>释放<code>getaddrinfo</code>函数动态分配的<code>addrinfo</code>结构</p>
+<h3 id="7-2-函数原型"><a href="#7-2-函数原型" class="headerlink" title="7.2 函数原型"></a>7.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">freeaddrinfo</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> addrinfo *ai)</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reading-Notes/" class="category-chain-item">Reading Notes</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Reading-Notes/UNP/" class="category-chain-item">UNP</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/unix/" class="print-no-link">#unix</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"zhgaocs/zhgaocs.github.io","repo-id":"R_kgDOKEb5DA","category":"Announcements","category-id":"DIC_kwDOKEb5DM4CZqPN","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+        <span>Powered by</span> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <span>&</span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
