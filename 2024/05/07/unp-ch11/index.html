@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="zhgaocs">
 <meta property="og:description" content="UNIX Network Programming—Chapter 11 名字与地址转换1. gethostbyname函数1.1 功能根据主机名获取对应的IP地址信息 1.2 hostent结构体12345678struct hostent &#x2F;&#x2F; host entry&amp;#123;    char  *h_name;      &#x2F;&#x2F; 正式主机名    char **h_aliases;   &#x2F;&#x2F; 主">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://zhgaocs.github.io/2024/05/07/unp-ch11/hostent.png">
+<meta property="og:image" content="c:/Users/zhgaocs/Desktop/GithubBlog/images/hostent.png">
 <meta property="article:published_time" content="2024-05-07T11:29:10.000Z">
-<meta property="article:modified_time" content="2024-05-07T11:32:29.462Z">
+<meta property="article:modified_time" content="2024-05-08T03:34:23.557Z">
 <meta property="article:author" content="zhgaocs">
 <meta property="article:tag" content="unix">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://zhgaocs.github.io/2024/05/07/unp-ch11/hostent.png">
+<meta name="twitter:image" content="c:/Users/zhgaocs/Desktop/GithubBlog/images/hostent.png">
   
   
   
@@ -198,7 +198,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.8k words
+          4.3k words
         
       </span>
     
@@ -258,7 +258,7 @@
                 <h1 id="UNIX-Network-Programming—Chapter-11-名字与地址转换"><a href="#UNIX-Network-Programming—Chapter-11-名字与地址转换" class="headerlink" title="UNIX Network Programming—Chapter 11 名字与地址转换"></a>UNIX Network Programming—Chapter 11 名字与地址转换</h1><h2 id="1-gethostbyname函数"><a href="#1-gethostbyname函数" class="headerlink" title="1. gethostbyname函数"></a>1. <code>gethostbyname</code>函数</h2><h3 id="1-1-功能"><a href="#1-1-功能" class="headerlink" title="1.1 功能"></a>1.1 功能</h3><p>根据主机名获取对应的IP地址信息</p>
 <h3 id="1-2-hostent结构体"><a href="#1-2-hostent结构体" class="headerlink" title="1.2 hostent结构体"></a>1.2 <code>hostent</code>结构体</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">hostent</span> // <span class="hljs-title">host</span> <span class="hljs-title">entry</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">char</span>  *h_name;      <span class="hljs-comment">// 正式主机名</span><br>    <span class="hljs-type">char</span> **h_aliases;   <span class="hljs-comment">// 主机别名</span><br>    <span class="hljs-type">int</span>    h_addrtype;  <span class="hljs-comment">// 主机IP地址类型：IPV4-AF_INET</span><br>    <span class="hljs-type">int</span>    h_length;    <span class="hljs-comment">// 主机IP地址字节长度，对于IPv4是四字节，即32位</span><br>    <span class="hljs-type">char</span> **h_addr_list; <span class="hljs-comment">// 主机的IP地址列表</span><br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p><img src="/2024/05/07/unp-ch11/hostent.png" srcset="/img/loading.gif" lazyload alt="hostent结构和它所包含的信息"></p>
+<p><img src="C:/Users/zhgaocs/Desktop/GithubBlog/images/hostent.png" srcset="/img/loading.gif" lazyload alt="hostent结构和它所包含的信息"></p>
 <h3 id="1-3-函数原型"><a href="#1-3-函数原型" class="headerlink" title="1.3 函数原型"></a>1.3 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">struct</span> hostent *<span class="hljs-title function_">gethostbyname</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *hostname)</span>; <span class="hljs-comment">// 成功返回非空指针，出错返回NULL且置h_errno</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="1-4-h-errno"><a href="#1-4-h-errno" class="headerlink" title="1.4 h_errno"></a>1.4 <code>h_errno</code></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> h_errno;<br><br><span class="hljs-type">char</span> *<span class="hljs-title function_">hstrerror</span><span class="hljs-params">(<span class="hljs-type">int</span> err)</span>;<br></code></pre></td></tr></table></figure>
@@ -397,8 +397,43 @@
 <h2 id="7-freeaddrinfo函数"><a href="#7-freeaddrinfo函数" class="headerlink" title="7. freeaddrinfo函数"></a>7. <code>freeaddrinfo</code>函数</h2><h3 id="7-1-功能"><a href="#7-1-功能" class="headerlink" title="7.1 功能"></a>7.1 功能</h3><p>释放<code>getaddrinfo</code>函数动态分配的<code>addrinfo</code>结构</p>
 <h3 id="7-2-函数原型"><a href="#7-2-函数原型" class="headerlink" title="7.2 函数原型"></a>7.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">freeaddrinfo</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> addrinfo *ai)</span>;<br></code></pre></td></tr></table></figure>
 
+<h2 id="8-getnameinfo函数"><a href="#8-getnameinfo函数" class="headerlink" title="8. getnameinfo函数"></a>8. <code>getnameinfo</code>函数</h2><h3 id="8-1-功能"><a href="#8-1-功能" class="headerlink" title="8.1 功能"></a>8.1 功能</h3><p>将套接字地址结构转换为主机名和服务名</p>
+<h3 id="8-2-函数原型"><a href="#8-2-函数原型" class="headerlink" title="8.2 函数原型"></a>8.2 函数原型</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netdb.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">getnameinfo</span><span class="hljs-params">(</span><br><span class="hljs-params">    <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr *addr, <span class="hljs-type">socklen_t</span> addrlen,</span><br><span class="hljs-params">    <span class="hljs-type">char</span> *host, <span class="hljs-type">socklen_t</span> hostlen,</span><br><span class="hljs-params">    <span class="hljs-type">char</span> *serv, <span class="hljs-type">socklen_t</span> servlen, <span class="hljs-type">int</span> flags)</span>; <span class="hljs-comment">// 成功返回0，出错返回非0</span><br></code></pre></td></tr></table></figure>
 
-
+<h3 id="8-3-主机名参数：host和hostlen"><a href="#8-3-主机名参数：host和hostlen" class="headerlink" title="8.3 主机名参数：host和hostlen"></a>8.3 主机名参数：<code>host</code>和<code>hostlen</code></h3><p>如果不需要请求主机名，可以通过设置<code>host</code>参数为<code>NULL</code>或者<code>hostlen</code>参数为<code>0</code>来实现</p>
+<h3 id="8-4-服务名参数：serv和servlen"><a href="#8-4-服务名参数：serv和servlen" class="headerlink" title="8.4 服务名参数：serv和servlen"></a>8.4 服务名参数：<code>serv</code>和<code>servlen</code></h3><p>如果不需要请求服务名，可以通过设置<code>serv</code>参数为<code>NULL</code>或者<code>servlen</code>参数为<code>0</code>来实现</p>
+<h3 id="8-5-参数flags"><a href="#8-5-参数flags" class="headerlink" title="8.5 参数flags"></a>8.5 参数<code>flags</code></h3><table>
+<thead>
+<tr>
+<th align="center">常值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>NI_DGRAM</code></td>
+<td align="center">数据报服务</td>
+</tr>
+<tr>
+<td align="center"><code>NI_NAMEREQD</code></td>
+<td align="center">若不能从地址解析出名字则返回错误</td>
+</tr>
+<tr>
+<td align="center"><code>NI_NOFQDN</code></td>
+<td align="center">只返回FQDN的主机名部分</td>
+</tr>
+<tr>
+<td align="center"><code>NI_NUMERICHOST</code></td>
+<td align="center">以数串格式返回主机字符串</td>
+</tr>
+<tr>
+<td align="center"><code>NI_NUMERICSCOPE</code></td>
+<td align="center">以数串格式返回范围标识字符串</td>
+</tr>
+<tr>
+<td align="center"><code>NI_NUMERICSERV</code></td>
+<td align="center">以数串格式返回服务字符串</td>
+</tr>
+</tbody></table>
 
                 
               </div>
